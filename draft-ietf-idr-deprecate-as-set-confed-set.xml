@@ -14,17 +14,11 @@
 
 <rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-09" updates="4271 5065" obsoletes="6472" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-
   <?rfc toc="yes" ?>
-
   <?rfc symrefs="yes" ?>
-
   <?rfc sortrefs="yes"?>
-
   <?rfc iprnotified="no" ?>
-
   <?rfc strict="yes" ?>
-
   <?rfc compact="yes" ?>
 
   <!-- Don't put each section on its own page -->
@@ -38,13 +32,9 @@
       <address>
         <postal>
           <street>1600 Amphitheatre Parkway</street>
-
           <city>Mountain View</city>
-
           <region>CA</region>
-
           <code>94043</code>
-
           <country>US</country>
         </postal>
 
@@ -60,13 +50,9 @@
       <address>
         <postal>
           <street>100 Bureau Drive</street>
-
           <city>Gaithersburg</city>
-
           <region>MD</region>
-
           <code>20899</code>
-
           <country>US</country>
         </postal>
 
@@ -82,13 +68,9 @@
       <address>
         <postal>
           <street>100 Bureau Drive</street>
-
           <city>Gaithersburg</city>
-
           <region>MD</region>
-
           <code>20899</code>
-
           <country>US</country>
         </postal>
 
@@ -97,7 +79,6 @@
         <email>lilia.hannachi@nist.gov</email>
       </address>
     </author>
-
 
     <author fullname="Jeffrey Haas" initials="J." surname="Haas">
       <organization>Juniper Networks, Inc.</organization>
@@ -121,35 +102,65 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
 
 
     <abstract>
-<t> 
-BCP 172 (i.e., RFC 6472) recommends not using AS_SET and AS_CONFED_SET in the Border Gateway Protocol. This document advances this recommendation to a standards requirement in BGP; it proscribes the use of the AS_SET and AS_CONFED_SET types of path segments in the AS_PATH. This is done to simplify the design and implementation of BGP and to make the semantics of the originator of a route clearer. This will also simplify the design, implementation, and deployment of various BGP security mechanisms. This document (if approved) updates RFC 4271 and RFC 5065 by eliminating AS_SET and AS_CONFED_SET types, and obsoletes RFC 6472.
-</t>
-      
-    </abstract>
+      <t>BCP 172 (i.e., RFC 6472) recommends not using AS_SET and AS_CONFED_SET
+      in the Border Gateway Protocol. This document advances this
+      recommendation to a standards requirement in BGP; it proscribes the use
+      of the AS_SET and AS_CONFED_SET types of path segments in the AS_PATH.
+      This is done to simplify the design and implementation of BGP and to make
+      the semantics of the originator of a route clearer. This will also
+      simplify the design, implementation, and deployment of various BGP
+      security mechanisms. This document (if approved) updates RFC 4271 and RFC
+      5065 by eliminating AS_SET and AS_CONFED_SET types, and obsoletes RFC
+      6472.</t>
+    </abstract> 
   </front>
 
   <middle>
     <section title="Introduction">
 
-<t>BCP 172 <xref target="RFC6472"></xref> makes a recommendation for not using AS_SET (see <xref target="RFC4271"></xref>) and AS_CONFED_SET (see <xref target="RFC5065"></xref>) in the Border Gateway Protocol (BGP). This document advances the BCP recommendation to a standards requirement in BGP; it proscribes the use of the AS_SET and AS_CONFED_SET types of path segments in the AS_PATH. </t> 
+      <t>BCP 172 <xref target="RFC6472"></xref> makes a recommendation for not
+      using AS_SET (see <xref target="RFC4271"></xref>) and AS_CONFED_SET (see
+      <xref target="RFC5065"></xref>) in the Border Gateway Protocol (BGP).
+      This document advances the BCP recommendation to a standards requirement
+      in BGP; it proscribes the use of the AS_SET and AS_CONFED_SET types of
+      path segments in the AS_PATH.</t> 
 
-      <t>The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and 5.1.2 of <xref
-      target="RFC4271"></xref>) is created by a router that is
-      performing route aggregation and contains an unordered set of Autonomous Systems (ASes) that contributing prefixes in the aggregate have  
+      <t>The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and
+      5.1.2 of <xref target="RFC4271"></xref>) is created by a router that is
+      performing route aggregation and contains an unordered set of Autonomous
+      Systems (ASes) that contributing prefixes in the aggregate have
       traversed. The AS_CONFED_SET path segment (see <xref
-      target="RFC5065"></xref>) in the AS_PATH attribute is created by a
-      router that is performing route aggregation and contains an unordered
-      set of Member AS Numbers in the local confederation that contributing prefixes in the aggregate have
-      traversed. It is very similar to an AS_SET but is used within a
-      confederation.</t>
+      target="RFC5065"></xref>) in the AS_PATH attribute is created by a router
+      that is performing route aggregation and contains an unordered set of
+      Member AS Numbers in the local confederation that contributing prefixes
+      in the aggregate have traversed. It is very similar to an AS_SET but is
+      used within a confederation.</t>
 
-      <t>By performing aggregation, a router is combining multiple existing routes into a single new route.  The aggregation together with the use of AS_SET blurs the semantics of origin AS for the prefix being announced. Therefore, the aggregation with AS_SET (or AS_CONFED_SET) can cause operational issues, such as not being able to authenticate a route origin for the aggregate prefix in new BGP security technologies such as those that take advantage of X.509 extensions for IP addresses and AS identifiers <xref target="RFC3779"></xref> <xref target="RFC6480"></xref> <xref target="RFC6811"></xref> <xref target="RFC8205"></xref>. This in turn could result in reachability problems for the aggregated prefix and its components (i.e., more specific prefixes). 
-
+      <t>By performing aggregation, a router is combining multiple existing
+      routes into a single new route.  The aggregation together with the use of
+      AS_SET blurs the semantics of origin AS for the prefix being announced.
+      Therefore, the aggregation with AS_SET (or AS_CONFED_SET) can cause
+      operational issues, such as not being able to authenticate a route origin
+      for the aggregate prefix in new BGP security technologies such as those
+      that take advantage of X.509 extensions for IP addresses and AS
+      identifiers <xref target="RFC3779"></xref> <xref target="RFC6480"></xref>
+      <xref target="RFC6811"></xref> <xref target="RFC8205"></xref>. This in
+      turn could result in reachability problems for the aggregated prefix and
+      its components (i.e., more specific prefixes).</t>
 <!-- The aggregation as described above could also create traffic engineering issues, because the precise path information for the component prefixes are not preserved. -->
-</t>
 
-      <t>From analysis of past Internet routing data, it is apparent that aggregation that involves AS_SETs is very seldom used in practice on the public Internet <xref target="Analysis"></xref> and when it is used, it is often used incorrectly -- only a single AS in the AS_SET are by far the most common cases. Also, very often the same AS appears in the AS_SEQUENCE and the AS_SET in the BGP update. The occurrence of reserved AS numbers (<xref target="IANA-SP-ASN"></xref>) is also somewhat frequent. Because the aggregation involving AS_SETs is very rarely used, the reduction in table size provided by this is extremely small, and any advantage thereof is outweighed by additional complexity in BGP.  As noted above, AS_SETs also pose impediments to implementation of new BGP security technologies.
-</t>
+      <t>From analysis of past Internet routing data, it is apparent that
+      aggregation that involves AS_SETs is very seldom used in practice on the
+      public Internet <xref target="Analysis"></xref> and when it is used, it
+      is often used incorrectly -- only a single AS in the AS_SET are by far
+      the most common cases. Also, very often the same AS appears in the
+      AS_SEQUENCE and the AS_SET in the BGP update. The occurrence of reserved
+      AS numbers (<xref target="IANA-SP-ASN"></xref>) is also somewhat
+      frequent. Because the aggregation involving AS_SETs is very rarely used,
+      the reduction in table size provided by this is extremely small, and any
+      advantage thereof is outweighed by additional complexity in BGP.  As
+      noted above, AS_SETs also pose impediments to implementation of new BGP
+      security technologies.</t>
 
 <!--
       In the past, AS_SET had been used in a few rare cases to allow route aggregation where two or more providers could form the same aggregate prefix, using the exact match of the other's aggregate prefix in some advertisement and configuring the aggregation differently elsewhere.  The key to configuring this correctly was to form the aggregate at the border in the outbound BGP policy and omit prefixes from the AS that the aggregate was being advertised to. The AS_SET therefore allowed this practice without the loss of BGP's AS_PATH loop protection.  This use of AS_SET served a purpose that fell in line with the original intended use. Without the use of AS_SET, aggregates must always contain only less-specific prefixes (not less than or equal to) and must never aggregate an exact match.
@@ -158,19 +169,28 @@ BCP 172 (i.e., RFC 6472) recommends not using AS_SET and AS_CONFED_SET in the Bo
     </section>
 
     <section title="Requirements Language">
-      <t>
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"></xref> <xref target="RFC8174"></xref> when, and only when, they appear in all capitals, as shown here.
-</t>
-    </section>
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in BCP 14
+      <xref target="RFC2119"></xref> <xref target="RFC8174"></xref> when, and
+      only when, they appear in all capitals, as shown here.  </t> </section>
 
     <section title="Recommendations">
-      <t>
+      <t>BGP speakers conforming to this document (i.e., conformant BGP
+      speakers) MUST NOT locally generate BGP UPDATE messages containing AS_SET
+      or AS_CONFED_SET. Conformant BGP speakers SHOULD NOT send BGP UPDATE
+      messages containing AS_SET or AS_CONFED_SET. Upon receipt of such
+      messages, conformant BGP speakers SHOULD use the "Treat-as-withdraw"
+      error handling behavior as per <xref target="RFC7606"></xref>.</t>
 
-BGP speakers conforming to this document (i.e., conformant BGP speakers) MUST NOT locally generate BGP UPDATE messages containing AS_SET or AS_CONFED_SET. Conformant BGP speakers SHOULD NOT send BGP UPDATE messages containing AS_SET or AS_CONFED_SET. Upon receipt of such messages, conformant BGP speakers SHOULD use the "Treat-as-withdraw" error handling behavior as per <xref target="RFC7606"></xref>. 
-</t>
-
-<t>If a network operator wishes to consider BGP UPDATE messages with AS_SET or AS_CONFED_SET (received from an external peer) for path selection, they MAY have a feature (knob) in their BGP speaker to opt to do so on a per peer basis. The operator should understand the full implications of choosing this option. There is no knob concerning locally generated BGP UPDATE messages, i.e., as stated before a conformant BGP speaker must not locally generate BGP UPDATE messages with AS_SET or AS_CONFED_SET.   
-</t>
+      <t>If a network operator wishes to consider BGP UPDATE messages with
+      AS_SET or AS_CONFED_SET (received from an external peer) for path
+      selection, they MAY have a feature (knob) in their BGP speaker to opt to
+      do so on a per peer basis. The operator should understand the full
+      implications of choosing this option. There is no knob concerning locally
+      generated BGP UPDATE messages, i.e., as stated before a conformant BGP
+      speaker must not locally generate BGP UPDATE messages with AS_SET or
+      AS_CONFED_SET.</t>
 
 
 <!--
@@ -178,32 +198,47 @@ This involves undoing the aggregation that was previously performed (with AS_SET
 
 Route aggregation that was previously performed by proxy aggregation without the use of AS_SETs is still possible under some conditions. When doing this, operators MUST form the aggregate at the border in the outbound BGP policy and omit any prefixes from the AS that the aggregate is being advertised to. As with any change, the operator should understand the full implications of the change.
 -->   
-<t>
-Network operators MUST NOT locally generate any new announcements containing AS_SET or AS_CONFED_SET. If they have announced routes with AS_SET or AS_CONFED_SET in them, then they SHOULD withdraw those routes and re-announce routes for the aggregate or component prefixes (i.e., the more specific routes subsumed by the previously aggregated route) without AS_SET or AS_CONFED_SET in the updates. 
-</t>
+      <t>Network operators MUST NOT locally generate any new announcements
+      containing AS_SET or AS_CONFED_SET. If they have announced routes with
+      AS_SET or AS_CONFED_SET in them, then they SHOULD withdraw those routes
+      and re-announce routes for the aggregate or component prefixes (i.e., the
+      more specific routes subsumed by the previously aggregated route) without
+      AS_SET or AS_CONFED_SET in the updates.</t>
 
-      <t>It is worth noting that new BGP security technologies (such as those that take advantage of X.509 extensions for IP addresses and AS identifiers <xref target="RFC3779"></xref> <xref target="RFC6480"></xref> <xref target="RFC6811"></xref> <xref target="RFC8205"></xref>) might not support routes with AS_SET or AS_CONFED_SET in them, and may treat routes containing them as infeasible even before the updated BGP in this document is implemented. 
-
-</t>
+      <t>It is worth noting that new BGP security technologies (such as those
+      that take advantage of X.509 extensions for IP addresses and AS
+      identifiers <xref target="RFC3779"></xref> <xref target="RFC6480"></xref>
+      <xref target="RFC6811"></xref> <xref target="RFC8205"></xref>) might not
+      support routes with AS_SET or AS_CONFED_SET in them, and may treat routes
+      containing them as infeasible even before the updated BGP in this
+      document is implemented.</t>
     </section>
 
     <section title="Updates to Existing RFCs">
+      <!-- This document eliminates AS_PATH segment type 1, namely, AS_SET that is specified in Section 4.3 of <xref target="RFC4271"></xref>. That is, in a future specification of BGP - one that would obsolete RFC 4271 - the use of AS_SET will not be specified. -->
+      <t>This document deprecates the AS_SET (type 1) AS_PATH segment type from
+      <xref target="RFC4271"></xref>. BGP speakers conforming to this document
+      (i.e., conformant BGP speakers) MUST NOT locally generate BGP UPDATE
+      messages containing AS_SET. Conformant BGP speakers SHOULD NOT send BGP
+      UPDATE messages containing AS_SET. Upon receipt of such messages,
+      conformant BGP speakers SHOULD use the "Treat-as-withdraw" error handling
+      behavior as per <xref target="RFC7606"></xref>.</t>
 
-<t>
-<!-- This document eliminates AS_PATH segment type 1, namely, AS_SET that is specified in Section 4.3 of <xref target="RFC4271"></xref>. That is, in a future specification of BGP - one that would obsolete RFC 4271 - the use of AS_SET will not be specified. -->
-
-This document deprecates the AS_SET (type 1) AS_PATH segment type from <xref target="RFC4271"></xref>. BGP speakers conforming to this document (i.e., conformant BGP speakers) MUST NOT locally generate BGP UPDATE messages containing AS_SET. Conformant BGP speakers SHOULD NOT send BGP UPDATE messages containing AS_SET. Upon receipt of such messages, conformant BGP speakers SHOULD use the "Treat-as-withdraw" error handling behavior as per <xref target="RFC7606"></xref>.   
-</t>
-
-<t>
 <!-- This document also eliminates AS_PATH segment type 4, namely, AS_CONFED_SET that is specified in Section 3 of <xref target="RFC5065"></xref>. That is, in a future specification of Autonomous System Confederations for BGP - one that would obsolete RFC 5065 - the use of AS_CONFED_SET will not be specified. -->   
+      <t>This document deprecates the AS_CONFED_SET (type 4) AS_PATH segment
+      type from <xref target="RFC5065"></xref>. Conformant BGP speakers MUST
+      NOT locally generate BGP UPDATE messages containing AS_CONFED_SET.
+      Conformant BGP speakers SHOULD NOT send BGP UPDATE messages containing
+      AS_CONFED_SET. Upon receipt of such messages, conformant BGP speakers
+      SHOULD use the "Treat-as-withdraw" error handling behavior as per 
+      <xref target="RFC7606"></xref>.</t>
 
-This document deprecates the AS_CONFED_SET (type 4) AS_PATH segment type from <xref target="RFC5065"></xref>. Conformant BGP speakers MUST NOT locally generate BGP UPDATE messages containing AS_CONFED_SET. Conformant BGP speakers SHOULD NOT send BGP UPDATE messages containing AS_CONFED_SET. Upon receipt of such messages, conformant BGP speakers SHOULD use the "Treat-as-withdraw" error handling behavior as per <xref target="RFC7606"></xref>.   
-</t>
-<t>
-Wherever mentions of AS_SET or AS_CONFED_SET occur in <xref target="RFC4271"></xref> and <xref target="RFC5065"></xref>, appropriate modification or elimination of the text must be made in future RFCs that would replace these RFCs, consistent with the deprecation of AS_SET and AS_CONFED_SET.
-</t>
- 
+      <t> Wherever mentions of AS_SET or AS_CONFED_SET occur in 
+      <xref target="RFC4271"></xref> and <xref target="RFC5065"></xref>,
+      appropriate modification or elimination of the text must be made in
+      future RFCs that would replace these RFCs, consistent with the
+      deprecation of AS_SET and AS_CONFED_SET. </t>
+
 <!--
 Some specific recommendations in this regard are listed below.
 </t>
@@ -225,22 +260,43 @@ It is RECOMMENDED that Appendix F.6 in <xref target="RFC4271"></xref> be elimina
 </t>
 -->
     </section>
-<section title="Operational Considerations">
-<t>
-When aggregating prefixes, network operators MUST use brief aggregation. In brief aggregation, the AGGREGATOR attribute is included but the AS_SET or AS_CONFED_SET attribute is not included. 
-</t>
-<t>
-When doing the above, operators MUST form the aggregate at the border in the outbound BGP policy and omit any prefixes from the AS that the aggregate is being advertised to. In other words, an aggregate prefix MUST NOT be announced to the contributing ASes. Instead, more specific prefixes (from the aggregate) MUST be announced to each contributing AS, excluding any that were learned from the contributing AS in consideration. For illustration, if p1/24 (from AS1), p2/24 (from AS2), p3/24 (from AS3) and p4/24 (from AS4) are aggregated to p/22, then p/22 will not be announced to AS1, AS2, AS3, or AS4. Instead, as further illustration, p1/24, p2/24 and p4/24 are announced to AS3. Or, possibly q/23 (aggregate of p1/24 and p2/24) and p4/24 are announced to AS3.
-</t>
-<t>
-Operators MUST install egress filters to block data packets when the destination address belongs to an internal prefix. Similarly, any known single-homed customer prefix MUST also be included in the egress filters except on the interface for that customer. This mitigates looping in the data plane when connection to such an internal or customer prefix is lost. This mechanism effectively compensates for the lack of the additional loop detection capability accorded by AS_SETs (if they were allowed).
-</t>
+
+    <section title="Operational Considerations">
+      <t>When aggregating prefixes, network operators MUST use brief
+      aggregation. In brief aggregation, the AGGREGATOR attribute is included
+      but the AS_SET or AS_CONFED_SET attribute is not included.</t>
+
+      <t>When doing the above, operators MUST form the aggregate at the border
+      in the outbound BGP policy and omit any prefixes from the AS that the
+      aggregate is being advertised to. In other words, an aggregate prefix
+      MUST NOT be announced to the contributing ASes. Instead, more specific
+      prefixes (from the aggregate) MUST be announced to each contributing AS,
+      excluding any that were learned from the contributing AS in
+      consideration. For illustration, if p1/24 (from AS1), p2/24 (from AS2),
+      p3/24 (from AS3) and p4/24 (from AS4) are aggregated to p/22, then p/22
+      will not be announced to AS1, AS2, AS3, or AS4. Instead, as further
+      illustration, p1/24, p2/24 and p4/24 are announced to AS3. Or, possibly
+      q/23 (aggregate of p1/24 and p2/24) and p4/24 are announced to AS3.</t>
+
+      <t>Operators MUST install egress filters to block data packets when the
+      destination address belongs to an internal prefix. Similarly, any known
+      single-homed customer prefix MUST also be included in the egress filters
+      except on the interface for that customer. This mitigates looping in the
+      data plane when connection to such an internal or customer prefix is
+      lost. This mechanism effectively compensates for the lack of the
+      additional loop detection capability accorded by AS_SETs (if they were
+      allowed).</t>
 
     </section>
 
     <section title="Security Considerations">
       <t>This document obsoletes the use of aggregation techniques that
-      create AS_SETs or AS_CONFED_SETs. Obsoleting these path segment types from BGP and removal of the related code from implementations would potentially decrease the attack surface for BGP. Deployments of new BGP security technologies <xref target="RFC6480"></xref> <xref target="RFC6811"></xref> <xref target="RFC8205"></xref> benefit greatly if AS_SET and AS_CONFED_SET are not used in BGP. </t>
+      create AS_SETs or AS_CONFED_SETs. Obsoleting these path segment types
+      from BGP and removal of the related code from implementations would
+      potentially decrease the attack surface for BGP. Deployments of new BGP
+      security technologies <xref target="RFC6480"></xref> 
+      <xref target="RFC6811"></xref> <xref target="RFC8205"></xref> benefit
+      greatly if AS_SET and AS_CONFED_SET are not used in BGP.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -248,9 +304,13 @@ Operators MUST install egress filters to block data packets when the destination
     </section>
 
     <section title="Acknowledgements">
-      <t>
-The authors would like to thank John Heasley, Job Snijders, Jared Mauch, Jakob Heitz, Keyur Patel, Douglas Montgomery, Randy Bush, Susan Hares, John Scudder, Curtis Villamizar, Danny McPherson, Chris Morrow, Tom Petch, Ilya Varlashkin, Enke Chen, Tony Li, Florian Weimer, John Leslie, Paul Jakma, Rob Austein, Russ Housley, Sandra Murphy, Steve Bellovin, Steve Kent, Steve Padgett, Alfred Hoenes, and Alvaro Retana for comments and suggestions.
-</t>
+      <t>The authors would like to thank John Heasley, Job Snijders, Jared
+      Mauch, Jakob Heitz, Keyur Patel, Douglas Montgomery, Randy Bush, Susan
+      Hares, John Scudder, Curtis Villamizar, Danny McPherson, Chris Morrow,
+      Tom Petch, Ilya Varlashkin, Enke Chen, Tony Li, Florian Weimer, John
+      Leslie, Paul Jakma, Rob Austein, Russ Housley, Sandra Murphy, Steve
+      Bellovin, Steve Kent, Steve Padgett, Alfred Hoenes, and Alvaro Retana for
+      comments and suggestions.</t>
     </section>
   </middle>
 
@@ -259,10 +319,9 @@ The authors would like to thank John Heasley, Job Snijders, Jared Mauch, Jakob H
       &rfc2119;
       &rfc4271;
       &rfc5065;
-</references>
+    </references>
 
-<references title="Informative References">
-
+    <references title="Informative References">
       &rfc3779; 
       &rfc6472;
       &rfc6811;
@@ -271,18 +330,18 @@ The authors would like to thank John Heasley, Job Snijders, Jared Mauch, Jakob H
       &rfc8205;
       &rfc8174;
 
-     <reference anchor="IANA-SP-ASN"
-      target="https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml">
+      <reference anchor="IANA-SP-ASN"
+       target="https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml">
         <front>
           <title>Special-Purpose Autonomous System (AS) Numbers</title>
-<author initials="" surname="">
-            <organization />
-          </author>
-          <date month="" year="" />
+            <author initials="" surname="">
+              <organization />
+            </author>
+            <date month="" year="" />
         </front>
       </reference>
 
-     <reference anchor="Analysis"
+      <reference anchor="Analysis"
                  target="https://github.com/ksriram25/IETF/blob/main/Detailed-AS_SET-analysis.txt">
         <front>
           <title>Detailed analysis of AS_SETs in BGP updates</title>
@@ -302,4 +361,3 @@ The authors would like to thank John Heasley, Job Snijders, Jared Mauch, Jakob H
     </references>
   </back>
 </rfc>
-
