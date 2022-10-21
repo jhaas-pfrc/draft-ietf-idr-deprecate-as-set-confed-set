@@ -7,9 +7,9 @@ Internet-Draft                                              Google, Inc.
 Obsoletes: 6472 (if approved)                                  K. Sriram
 Updates: 4271 5065 (if approved)                             L. Hannachi
 Intended status: Standards Track                                USA NIST
-Expires: 23 April 2023                                           J. Haas
+Expires: 24 April 2023                                           J. Haas
                                                   Juniper Networks, Inc.
-                                                         20 October 2022
+                                                         21 October 2022
 
 
                       Deprecation of AS_SET in BGP
@@ -17,15 +17,15 @@ Expires: 23 April 2023                                           J. Haas
 
 Abstract
 
-   BCP 172 (i.e., RFC 6472) recommends not using AS_SET in the Border
-   Gateway Protocol.  This document advances this recommendation to a
-   standards requirement in BGP; it proscribes the use of the AS_SET
-   type of path segments in the AS_PATH.  This is done to simplify the
-   design and implementation of BGP and to make the semantics of the
-   originator of a route clearer.  This will also simplify the design,
-   implementation, and deployment of various BGP security mechanisms.
-   This document (if approved) updates RFC 4271 and RFC 5065, and
-   obsoletes RFC 6472.
+   BCP 172 (i.e., RFC 6472) recommends not using AS_SET and
+   AS_CONFED_SET in the Border Gateway Protocol.  This document advances
+   this recommendation to a standards requirement in BGP; it proscribes
+   the use of the AS_SET type of path segments in the AS_PATH.  This is
+   done to simplify the design and implementation of BGP and to make the
+   semantics of the originator of a route clearer.  This will also
+   simplify the design, implementation, and deployment of various BGP
+   security mechanisms.  This document (if approved) updates RFC 4271
+   and RFC 5065, and obsoletes RFC 6472.
 
 Status of This Memo
 
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2023.
+   This Internet-Draft will expire on 24 April 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 1]
+Kumari, et al.            Expires 24 April 2023                 [Page 1]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -92,7 +92,7 @@ Table of Contents
    [RFC4271]) and AS_CONFED_SET (see [RFC5065]) in the Border Gateway
    Protocol (BGP).  This document advances the BCP recommendation to a
    standards requirement in BGP; it proscribes the use of the AS_SET
-   typeS of path segments in the AS_PATH.
+   types of path segments in the AS_PATH.
 
    The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and
    5.1.2 of [RFC4271]) is created by a router that is performing route
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 2]
+Kumari, et al.            Expires 24 April 2023                 [Page 2]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -165,7 +165,7 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 3]
+Kumari, et al.            Expires 24 April 2023                 [Page 3]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -221,7 +221,7 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 4]
+Kumari, et al.            Expires 24 April 2023                 [Page 4]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -277,7 +277,7 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 5]
+Kumari, et al.            Expires 24 April 2023                 [Page 5]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -333,7 +333,7 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 6]
+Kumari, et al.            Expires 24 April 2023                 [Page 6]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -389,7 +389,7 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 7]
+Kumari, et al.            Expires 24 April 2023                 [Page 7]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -445,7 +445,7 @@ Authors' Addresses
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 8]
+Kumari, et al.            Expires 24 April 2023                 [Page 8]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -501,4 +501,4 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 
 
-Kumari, et al.            Expires 23 April 2023                 [Page 9]
+Kumari, et al.            Expires 24 April 2023                 [Page 9]

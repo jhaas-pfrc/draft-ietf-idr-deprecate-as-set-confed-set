@@ -103,16 +103,15 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
  BGP, BGP-4, Network Operator, RPKI, Aggregation, Route Origin Validation -->
 
     <abstract>
-      <t>BCP 172 (i.e., RFC 6472) recommends not using AS_SET in the Border
-      Gateway Protocol. This document advances this recommendation to a
-      standards requirement in BGP; it proscribes the use of the AS_SET type of
-      path segments in the AS_PATH.  This is done to simplify the design and
-      implementation of BGP and to make the semantics of the originator of a
+      <t>BCP 172 (i.e., RFC 6472) recommends not using AS_SET and AS_CONFED_SET
+      in the Border Gateway Protocol. This document advances this recommendation
+      to a standards requirement in BGP; it proscribes the use of the AS_SET
+      type of path segments in the AS_PATH.  This is done to simplify the design
+      and implementation of BGP and to make the semantics of the originator of a
       route clearer. This will also simplify the design, implementation, and
       deployment of various BGP security mechanisms. This document (if approved)
-      updates RFC 4271 and RFC 5065, and obsoletes RFC 6472.</t>
-    </abstract>
-  </front>
+      updates RFC 4271 and RFC 5065, and obsoletes RFC 6472.</t> </abstract>
+      </front>
 
   <middle>
     <section title="Introduction">
@@ -121,7 +120,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       using AS_SET (see <xref target="RFC4271"></xref>) and AS_CONFED_SET (see
       <xref target="RFC5065"></xref>) in the Border Gateway Protocol (BGP).
       This document advances the BCP recommendation to a standards requirement
-      in BGP; it proscribes the use of the AS_SET typeS of path segments in the
+      in BGP; it proscribes the use of the AS_SET types of path segments in the
       AS_PATH.</t> 
 
       <t>The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and
