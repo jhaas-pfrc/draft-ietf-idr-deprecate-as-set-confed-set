@@ -12,6 +12,7 @@
 <!ENTITY rfc7606 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7606.xml">
 <!ENTITY rfc8205 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8205.xml">
 <!ENTITY rfc8174 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
+<!ENTITY rfc9319 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9319.xml">
 ]>
 
 <rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-09" updates="4271 5065" obsoletes="6472" ipr="trust200902">
@@ -100,7 +101,7 @@
 
   <!-- [rfced] Please insert any keywords (beyond those that appear in the
 title) for use on http://www.rfc-editor.org/rfcsearch.html. 
- BGP, BGP-4, Network Operator, RPKI, Aggregation, Route Origin Validation -->
+ BGP, BGP-4, Network Operator, RPKI, Aggregation, RPKI-based Route Origin Validation, RPKI-ROV -->
 
     <abstract>
       <t>BCP 172 (i.e., RFC 6472) recommends not using AS_SET and AS_CONFED_SET
@@ -121,9 +122,26 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       <xref target="RFC5065"></xref>) in the Border Gateway Protocol (BGP).
       This document advances the BCP recommendation to a standards requirement
       in BGP; it proscribes the use of the AS_SET types of path segments in the
-      AS_PATH.</t> 
+      AS_PATH. The purpose is to simplify the design
+      and implementation of BGP and to make the semantics of the originator of a
+      route clearer. This will also simplify the design, implementation, and
+      deployment of various BGP security mechanisms. In particular, the proscription of AS_SETs removes the possibility of ambiguity about origin AS in RPKI-based route origin validation (RPKI-ROV) <xref target="RFC6811"></xref> <xref target="RFC6907"></xref> <xref target="RFC9319"></xref>. </t> 
 
-      <t>The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and
+<!-- KS: RFC 9319 is a new RFC on prudent use of maxLength in ROAs and it discusses several operational aspects of ROAs and RPKI-ROV; it is also the first RFC to formally define RPKI-ROV which is (will be) included in the official IETF Abbreviations list. --> 
+
+<!--
+KS: I was going to include the following paragraph here but then I realized that the proper operation of BGPsec requires both AS_SET and AS_CONFED_SET to be deprcated. 
+
+<t> 
+While this document proscribes the use of the AS_SET type of path segment 
+in the AS_PATH, it does not do so for the AS_CONFED_SET type.
+This is because the presence of AS_CONFED_SET does not pose a hinderance for determination the origin AS   when the final segment in an AS_PATH is 
+of type AS_CONFED_SET, the origin AS can still be determined for RPKI-ROV
+and it is simply the AS Confederation Identifier (see <xref target="5065"> <xref target="6811">).   
+</t> 
+-->
+
+      <t> The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and
       5.1.2 of <xref target="RFC4271"></xref>) is created by a router that is
       performing route aggregation and contains an unordered set of Autonomous
       Systems (ASes) that contributing prefixes in the aggregate have
@@ -147,14 +165,14 @@ origin. -->
 
       <t>By performing aggregation, a router is combining multiple BGP routes
       for more specific destinations into a new route for a less specific
-      destination.  (<xref target="RFC4271"/>, Section 9.1.2.2.) Aggregation
+      destination (<xref target="RFC4271"/>, Section 9.1.2.2.). Aggregation
       may blur the semantics of the origin AS for the prefix being announced by
       producing an AS_SET.  AS_SETs can cause operational issues, such as not
       being able to authenticate a route origin for the aggregate prefix in new
       BGP security technologies such as those that take advantage of X.509
       extensions for IP addresses and AS identifiers 
       (<xref target="RFC3779"/>, <xref target="RFC6480"/>,
-      <xref target="RFC6811"/>,<xref target="RFC6907"/>,
+      <xref target="RFC6811"/>, <xref target="RFC6907"/>, <xref target="RFC9319"/>,
       <xref target="RFC8205"/>). This in turn could result in reachability
       problems for the aggregated prefix and its components; i.e., more
       specific prefixes.</t> 
@@ -192,8 +210,7 @@ origin. -->
 
     <section title="Recommendations">
       <t>BGP speakers conforming to this document (i.e., conformant BGP
-      speakers) SHOULD NOT locally generate BGP UPDATE messages containing AS_SET
-      or AS_CONFED_SET. Conformant BGP speakers SHOULD NOT send BGP UPDATE
+      speakers) SHOULD NOT locally generate BGP UPDATE messages containing AS_SET. Conformant BGP speakers SHOULD NOT send BGP UPDATE
       messages containing AS_SETs. Upon receipt of such messages, conformant BGP
       speakers SHOULD use the "Treat-as-withdraw" error handling behavior as per
       <xref target="RFC7606"></xref>.</t>
@@ -216,11 +233,11 @@ Route aggregation that was previously performed by proxy aggregation without the
 
       <t>BGP security technologies (such as those that take advantage of X.509
       extensions for IP addresses and AS identifiers (<xref target="RFC3779"/>,
-      <xref target="RFC6480"/> <xref target="RFC6811"/>, 
+      <xref target="RFC6480"/>, <xref target="RFC6811"/>, 
       <xref target="RFC8205"/>) might not support routes with AS_SETs or
-      AS_CONFED_SETs in them.  <xref target="RFC6907"/>, Sections 7.1.8 -
-      7.1.12  recommends that routes containing AS_SETs be considered RPKI
-      Invalid.</t>
+      AS_CONFED_SETs in them. Routes with AS_SETs have no possibility of ever being considered RPKI-ROV valid <xref target="RFC6811"/> <xref target="RFC6907"/>. 
+
+</t>
     </section>
 
     <section title="Updates to Existing RFCs">
@@ -285,11 +302,11 @@ Route aggregation that was previously performed by proxy aggregation without the
         BGP route, if AS_SETs are dropped.</t>
       </section>
 
-      <section title="Issues with &quot;Brief&quot; AS_PATH Aggregation and RPKI">
+      <section title="Issues with &quot;Brief&quot; AS_PATH Aggregation and RPKI-ROV">
         <t>While brief AS_PATH aggregation has the desirable property of not
         containing AS_SETs, the resulting aggregated AS_PATH may contain an
         unpredictable origin AS.  Such an unpredictable origin ASes may result
-        in RPKI validation issues:</t>
+        in RPKI-ROV validation issues:</t>
 
         <ul>
           <li>Depending on the contributing routes to the aggregate route, the
@@ -304,7 +321,7 @@ Route aggregation that was previously performed by proxy aggregation without the
       </section>
 
       <section title="Recommendations to Mitigate Unpredictable AS_PATH origins
-       for RPKI Purposes">
+       for RPKI-ROV Purposes">
         <t>In order to ensure a consistent BGP origin AS is announced for
         aggregate BGP routes for implementations of "brief" BGP aggregation, the
         implementation should be configured to truncate the AS_PATH after the
@@ -389,6 +406,7 @@ Route aggregation that was previously performed by proxy aggregation without the
       &rfc7606;
       &rfc8205;
       &rfc8174;
+      &rfc9319;
 
       <reference anchor="IANA-SP-ASN"
        target="https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml">
