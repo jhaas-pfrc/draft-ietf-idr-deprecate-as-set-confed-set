@@ -7,9 +7,9 @@ Internet-Draft                                              Google, Inc.
 Obsoletes: 6472 (if approved)                                  K. Sriram
 Updates: 4271 5065 (if approved)                             L. Hannachi
 Intended status: Standards Track                                USA NIST
-Expires: 24 April 2023                                           J. Haas
+Expires: 26 April 2023                                           J. Haas
                                                   Juniper Networks, Inc.
-                                                         21 October 2022
+                                                         23 October 2022
 
 
                       Deprecation of AS_SET in BGP
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 April 2023.
+   This Internet-Draft will expire on 26 April 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Kumari, et al.            Expires 24 April 2023                 [Page 1]
+Kumari, et al.            Expires 26 April 2023                 [Page 1]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -74,9 +74,9 @@ Table of Contents
    3.  Recommendations . . . . . . . . . . . . . . . . . . . . . . .   3
    4.  Updates to Existing RFCs  . . . . . . . . . . . . . . . . . .   4
      4.1.  BGP AS_PATH "Brief" Aggregation . . . . . . . . . . . . .   4
-     4.2.  Issues with "Brief" AS_PATH Aggregation and RPKI  . . . .   5
+     4.2.  Issues with "Brief" AS_PATH Aggregation and RPKI-ROV  . .   5
      4.3.  Recommendations to Mitigate Unpredictable AS_PATH origins
-           for RPKI Purposes . . . . . . . . . . . . . . . . . . . .   5
+           for RPKI-ROV Purposes . . . . . . . . . . . . . . . . . .   5
    5.  Operational Considerations  . . . . . . . . . . . . . . . . .   5
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
@@ -92,32 +92,39 @@ Table of Contents
    [RFC4271]) and AS_CONFED_SET (see [RFC5065]) in the Border Gateway
    Protocol (BGP).  This document advances the BCP recommendation to a
    standards requirement in BGP; it proscribes the use of the AS_SET
-   types of path segments in the AS_PATH.
+   types of path segments in the AS_PATH.  The purpose is to simplify
+   the design and implementation of BGP and to make the semantics of the
+   originator of a route clearer.  This will also simplify the design,
+   implementation, and deployment of various BGP security mechanisms.
+   In particular, the proscription of AS_SETs removes the possibility of
+   ambiguity about origin AS in RPKI-based route origin validation
+   (RPKI-ROV) [RFC6811] [RFC6907] [RFC9319].
 
    The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and
    5.1.2 of [RFC4271]) is created by a router that is performing route
    aggregation and contains an unordered set of Autonomous Systems
    (ASes) that contributing prefixes in the aggregate have traversed.
 
-   By performing aggregation, a router is combining multiple BGP routes
-   for more specific destinations into a new route for a less specific
-   destination.  ([RFC4271], Section 9.1.2.2.)  Aggregation may blur the
-   semantics of the origin AS for the prefix being announced by
-   producing an AS_SET.  AS_SETs can cause operational issues, such as
-   not being able to authenticate a route origin for the aggregate
-   prefix in new BGP security technologies such as those that take
 
 
 
-Kumari, et al.            Expires 24 April 2023                 [Page 2]
+
+Kumari, et al.            Expires 26 April 2023                 [Page 2]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
 
+   By performing aggregation, a router is combining multiple BGP routes
+   for more specific destinations into a new route for a less specific
+   destination ([RFC4271], Section 9.1.2.2.).  Aggregation may blur the
+   semantics of the origin AS for the prefix being announced by
+   producing an AS_SET.  AS_SETs can cause operational issues, such as
+   not being able to authenticate a route origin for the aggregate
+   prefix in new BGP security technologies such as those that take
    advantage of X.509 extensions for IP addresses and AS identifiers
-   ([RFC3779], [RFC6480], [RFC6811],[RFC6907], [RFC8205]).  This in turn
-   could result in reachability problems for the aggregated prefix and
-   its components; i.e., more specific prefixes.
+   ([RFC3779], [RFC6480], [RFC6811], [RFC6907], [RFC9319], [RFC8205]).
+   This in turn could result in reachability problems for the aggregated
+   prefix and its components; i.e., more specific prefixes.
 
    From analysis of historical Internet routing data, it is apparent
    that aggregation that involves AS_SETs is very seldom used in
@@ -139,10 +146,10 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
    BGP speakers conforming to this document (i.e., conformant BGP
    speakers) SHOULD NOT locally generate BGP UPDATE messages containing
-   AS_SET or AS_CONFED_SET.  Conformant BGP speakers SHOULD NOT send BGP
-   UPDATE messages containing AS_SETs.  Upon receipt of such messages,
-   conformant BGP speakers SHOULD use the "Treat-as-withdraw" error
-   handling behavior as per [RFC7606].
+   AS_SET.  Conformant BGP speakers SHOULD NOT send BGP UPDATE messages
+   containing AS_SETs.  Upon receipt of such messages, conformant BGP
+   speakers SHOULD use the "Treat-as-withdraw" error handling behavior
+   as per [RFC7606].
 
    If a network operator wishes to consider BGP UPDATE messages with
    AS_SETs received from an external BGP peers, they MAY have a feature
@@ -153,22 +160,21 @@ Internet-Draft           AS_SET use deprecation             October 2022
    Network operators SHOULD NOT locally generate any new announcements
    containing AS_SETs.
 
-   BGP security technologies (such as those that take advantage of X.509
-   extensions for IP addresses and AS identifiers ([RFC3779], [RFC6480]
-   [RFC6811], [RFC8205]) might not support routes with AS_SETs or
-   AS_CONFED_SETs in them.  [RFC6907], Sections 7.1.8 - 7.1.12
-   recommends that routes containing AS_SETs be considered RPKI Invalid.
 
 
 
 
 
-
-
-Kumari, et al.            Expires 24 April 2023                 [Page 3]
+Kumari, et al.            Expires 26 April 2023                 [Page 3]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
+
+   BGP security technologies (such as those that take advantage of X.509
+   extensions for IP addresses and AS identifiers ([RFC3779], [RFC6480],
+   [RFC6811], [RFC8205]) might not support routes with AS_SETs or
+   AS_CONFED_SETs in them.  Routes with AS_SETs have no possibility of
+   ever being considered RPKI-ROV valid [RFC6811] [RFC6907].
 
 4.  Updates to Existing RFCs
 
@@ -211,27 +217,24 @@ Internet-Draft           AS_SET use deprecation             October 2022
    |  aggregated.  Make this sequence the leading sequence of the
    |  aggregated AS_PATH attribute.
 
-   The ATOMIC_AGGREGATE Path Attribute is subsequently attached to the
-   BGP route, if AS_SETs are dropped.
 
 
 
 
-
-
-
-
-Kumari, et al.            Expires 24 April 2023                 [Page 4]
+Kumari, et al.            Expires 26 April 2023                 [Page 4]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
 
-4.2.  Issues with "Brief" AS_PATH Aggregation and RPKI
+   The ATOMIC_AGGREGATE Path Attribute is subsequently attached to the
+   BGP route, if AS_SETs are dropped.
+
+4.2.  Issues with "Brief" AS_PATH Aggregation and RPKI-ROV
 
    While brief AS_PATH aggregation has the desirable property of not
    containing AS_SETs, the resulting aggregated AS_PATH may contain an
    unpredictable origin AS.  Such an unpredictable origin ASes may
-   result in RPKI validation issues:
+   result in RPKI-ROV validation issues:
 
    *  Depending on the contributing routes to the aggregate route, the
       resulting origin AS may vary.
@@ -244,8 +247,8 @@ Internet-Draft           AS_SET use deprecation             October 2022
       (ROAs) [RFC6482] for each potential origin AS that may result from
       the expected aggregated AS_PATHs.
 
-4.3.  Recommendations to Mitigate Unpredictable AS_PATH origins for RPKI
-      Purposes
+4.3.  Recommendations to Mitigate Unpredictable AS_PATH origins for
+      RPKI-ROV Purposes
 
    In order to ensure a consistent BGP origin AS is announced for
    aggregate BGP routes for implementations of "brief" BGP aggregation,
@@ -264,24 +267,6 @@ Internet-Draft           AS_SET use deprecation             October 2022
    aggregation.  In brief aggregation, the AGGREGATOR attribute is
    included but the AS_SET attribute is not included.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Kumari, et al.            Expires 24 April 2023                 [Page 5]
-
-Internet-Draft           AS_SET use deprecation             October 2022
-
-
    When doing the above, operators MUST form the aggregate at the border
    in the outbound BGP policy and omit any prefixes from the AS that the
    aggregate is being advertised to.  In other words, an aggregate
@@ -289,6 +274,14 @@ Internet-Draft           AS_SET use deprecation             October 2022
    specific prefixes (from the aggregate) MUST be announced to each
    contributing AS, excluding any that were learned from the
    contributing AS in consideration.  For illustration, if p1/24 (from
+
+
+
+Kumari, et al.            Expires 26 April 2023                 [Page 5]
+
+Internet-Draft           AS_SET use deprecation             October 2022
+
+
    AS1), p2/24 (from AS2), p3/24 (from AS3) and p4/24 (from AS4) are
    aggregated to p/22, then p/22 will not be announced to AS1, AS2, AS3,
    or AS4.  Instead, as further illustration, p1/24, p2/24 and p4/24 are
@@ -331,17 +324,19 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 9.1.  Normative References
 
-
-
-Kumari, et al.            Expires 24 April 2023                 [Page 6]
-
-Internet-Draft           AS_SET use deprecation             October 2022
-
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+
+Kumari, et al.            Expires 26 April 2023                 [Page 6]
+
+Internet-Draft           AS_SET use deprecation             October 2022
+
 
    [RFC4271]  Rekhter, Y., Ed., Li, T., Ed., and S. Hares, Ed., "A
               Border Gateway Protocol 4 (BGP-4)", RFC 4271,
@@ -385,19 +380,19 @@ Internet-Draft           AS_SET use deprecation             October 2022
               DOI 10.17487/RFC6482, February 2012,
               <https://www.rfc-editor.org/info/rfc6482>.
 
-
-
-
-
-Kumari, et al.            Expires 24 April 2023                 [Page 7]
-
-Internet-Draft           AS_SET use deprecation             October 2022
-
-
    [RFC6811]  Mohapatra, P., Scudder, J., Ward, D., Bush, R., and R.
               Austein, "BGP Prefix Origin Validation", RFC 6811,
               DOI 10.17487/RFC6811, January 2013,
               <https://www.rfc-editor.org/info/rfc6811>.
+
+
+
+
+
+Kumari, et al.            Expires 26 April 2023                 [Page 7]
+
+Internet-Draft           AS_SET use deprecation             October 2022
+
 
    [RFC6907]  Manderson, T., Sriram, K., and R. White, "Use Cases and
               Interpretations of Resource Public Key Infrastructure
@@ -417,6 +412,12 @@ Internet-Draft           AS_SET use deprecation             October 2022
    [RFC8205]  Lepinski, M., Ed. and K. Sriram, Ed., "BGPsec Protocol
               Specification", RFC 8205, DOI 10.17487/RFC8205, September
               2017, <https://www.rfc-editor.org/info/rfc8205>.
+
+   [RFC9319]  Gilad, Y., Goldberg, S., Sriram, K., Snijders, J., and B.
+              Maddison, "The Use of maxLength in the Resource Public Key
+              Infrastructure (RPKI)", BCP 185, RFC 9319,
+              DOI 10.17487/RFC9319, October 2022,
+              <https://www.rfc-editor.org/info/rfc9319>.
 
 Authors' Addresses
 
@@ -444,8 +445,7 @@ Authors' Addresses
 
 
 
-
-Kumari, et al.            Expires 24 April 2023                 [Page 8]
+Kumari, et al.            Expires 26 April 2023                 [Page 8]
 
 Internet-Draft           AS_SET use deprecation             October 2022
 
@@ -501,4 +501,4 @@ Internet-Draft           AS_SET use deprecation             October 2022
 
 
 
-Kumari, et al.            Expires 24 April 2023                 [Page 9]
+Kumari, et al.            Expires 26 April 2023                 [Page 9]
