@@ -111,8 +111,8 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       in the AS_PATH.  This is done to simplify the design and implementation
       of BGP and to make the semantics of the originator of a BGP route clearer.
       This will also simplify the design, implementation, and deployment of
-      various BGP security mechanisms. This document, if approved, updates RFC
-      4271 and RFC 5065, and obsoletes RFC 6472.</t>
+      various BGP security mechanisms. This document updates RFC 4271 and RFC
+      5065, and obsoletes RFC 6472.</t>
     </abstract>
   </front>
 

@@ -7,9 +7,9 @@ Internet-Draft                                              Google, Inc.
 Obsoletes: 6472 (if approved)                                  K. Sriram
 Updates: 4271 5065 (if approved)                             L. Hannachi
 Intended status: Standards Track                                USA NIST
-Expires: 2 July 2023                                             J. Haas
+Expires: 9 July 2023                                             J. Haas
                                                   Juniper Networks, Inc.
-                                                        29 December 2022
+                                                          5 January 2023
 
 
                       Deprecation of AS_SET in BGP
@@ -25,8 +25,8 @@ Abstract
    simplify the design and implementation of BGP and to make the
    semantics of the originator of a BGP route clearer.  This will also
    simplify the design, implementation, and deployment of various BGP
-   security mechanisms.  This document, if approved, updates RFC 4271
-   and RFC 5065, and obsoletes RFC 6472.
+   security mechanisms.  This document updates RFC 4271 and RFC 5065,
+   and obsoletes RFC 6472.
 
 Status of This Memo
 
@@ -43,19 +43,19 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 July 2023.
+   This Internet-Draft will expire on 9 July 2023.
 
 Copyright Notice
 
-   Copyright (c) 2022 IETF Trust and the persons identified as the
+   Copyright (c) 2023 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 1]
+Kumari, et al.             Expires 9 July 2023                  [Page 1]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 2]
+Kumari, et al.             Expires 9 July 2023                  [Page 2]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
    a BGP route clearer.  This will also simplify the design,
@@ -165,9 +165,9 @@ Internet-Draft           AS_SET use deprecation            December 2022
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 3]
+Kumari, et al.             Expires 9 July 2023                  [Page 3]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
 3.  Recommendations
@@ -221,9 +221,9 @@ Internet-Draft           AS_SET use deprecation            December 2022
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 4]
+Kumari, et al.             Expires 9 July 2023                  [Page 4]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
    |  When a BGP speaker aggregates several routes for the purpose of
@@ -277,9 +277,9 @@ Internet-Draft           AS_SET use deprecation            December 2022
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 5]
+Kumari, et al.             Expires 9 July 2023                  [Page 5]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
 4.3.  Recommendations to Mitigate Unpredictable AS_PATH origins for
@@ -333,9 +333,9 @@ Internet-Draft           AS_SET use deprecation            December 2022
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 6]
+Kumari, et al.             Expires 9 July 2023                  [Page 6]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
 7.  IANA Considerations
@@ -389,9 +389,9 @@ Internet-Draft           AS_SET use deprecation            December 2022
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 7]
+Kumari, et al.             Expires 9 July 2023                  [Page 7]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
    [RFC3779]  Lynn, C., Kent, S., Seo, K., and RFC Publisher, "X.509
@@ -445,9 +445,9 @@ Internet-Draft           AS_SET use deprecation            December 2022
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 8]
+Kumari, et al.             Expires 9 July 2023                  [Page 8]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
    [RFC9319]  Gilad, Y., Goldberg, S., Sriram, K., Snijders, J.,
@@ -501,9 +501,9 @@ Appendix A.  Example of Route Filtering for Aggregate Routes and its
 
 
 
-Kumari, et al.             Expires 2 July 2023                  [Page 9]
+Kumari, et al.             Expires 9 July 2023                  [Page 9]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
          (       )     (       )           (       )     (       )
@@ -557,9 +557,9 @@ Appendix B.  Examples of Inconsistent BGP Origin-AS Generated by
 
 
 
-Kumari, et al.             Expires 2 July 2023                 [Page 10]
+Kumari, et al.             Expires 9 July 2023                 [Page 10]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
    Routes:
@@ -613,9 +613,9 @@ B.3.  Scenario 3: First one route, then another, the AS_PATHs overlap at
 
 
 
-Kumari, et al.             Expires 2 July 2023                 [Page 11]
+Kumari, et al.             Expires 9 July 2023                 [Page 11]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
 B.4.  Achieving Consistent Origin-AS During Aggregation
@@ -669,9 +669,9 @@ Authors' Addresses
 
 
 
-Kumari, et al.             Expires 2 July 2023                 [Page 12]
+Kumari, et al.             Expires 9 July 2023                 [Page 12]
 
-Internet-Draft           AS_SET use deprecation            December 2022
+Internet-Draft           AS_SET use deprecation             January 2023
 
 
    Lilia Hannachi
@@ -725,4 +725,4 @@ Internet-Draft           AS_SET use deprecation            December 2022
 
 
 
-Kumari, et al.             Expires 2 July 2023                 [Page 13]
+Kumari, et al.             Expires 9 July 2023                 [Page 13]
