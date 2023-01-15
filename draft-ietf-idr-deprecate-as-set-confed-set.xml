@@ -190,7 +190,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       <t>
       The document uses normative language such as "SHOULD NOT send" 
       rather than "MUST NOT send" with the intention of allowing 
-      some transition time for exisiting implementations and
+      some transition time for existing implementations and
       avoiding abrupt disruptions for the operators currently
       using AS_SETs or AS_CONFED_SETs. 
       However, it is strongly urged that operators stop
