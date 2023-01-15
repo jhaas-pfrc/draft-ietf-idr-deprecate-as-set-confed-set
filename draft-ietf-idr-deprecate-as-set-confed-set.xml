@@ -186,6 +186,18 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       UPDATE messages containing AS_SETs or AS_CONFED_SETs. Upon receipt of
       such messages, conformant BGP speakers SHOULD use the "treat-as-withdraw"
       error handling behavior as per <xref target="RFC7606"/>.</t>
+      
+      <t>
+      The document uses normative language such as "SHOULD NOT send" 
+      rather than "MUST NOT send" with the intention of allowing 
+      some transition time for exisiting implementations and
+      avoiding abrupt disruptions for the operators currently
+      using AS_SETs or AS_CONFED_SETs. 
+      However, it is strongly urged that operators stop
+      sending UPDATEs with AS_SETs or AS_CONFED_SETs as quickly as 
+      possible to avoid having UPDATEs dropped by BGP security 
+      mechanisms such as RPKI-ROV and BGPsec. 
+      </t>
 
       <t>If a network operator wishes to consider BGP UPDATE messages with
       AS_SETs or AS_CONFED_SETs received from an external BGP peers, they MAY
@@ -223,8 +235,8 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
 
       <section title="BGP AS_PATH &quot;Brief&quot; Aggregation">
         <t> 
-Sections 9.1.4 and 9.2.2.2 of <xref target="RFC4271"/> describe BGP aggregation procedures. 
-Appendix F.6 in <xref target="RFC4271"/> 
+      Sections 9.1.4 and 9.2.2.2 of <xref target="RFC4271"/> describe BGP aggregation procedures. 
+      Appendix F.6 in <xref target="RFC4271"/> 
         describes a generally unimplemented "Complex AS_PATH Aggregation"
         procedure.</t>
 
@@ -248,10 +260,8 @@ Appendix F.6 in <xref target="RFC4271"/>
         <t>When BGP AS_PATH aggregation is done according to the <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>,
         procedures and any resulting AS_SETs are discarded, this is typically
         referred to as "brief" aggregation in implementations.
-(Note: It is true in practice and assumed here that AS_SETs 
-occur only at the beginning (origination side) of the AS_PATHs.)
-Brief aggregation results in an AS_PATH that has the property 
-(from <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>):</t>
+        Brief aggregation results in an AS_PATH that has the property 
+        (from <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>):</t>
 
         <blockquote>
           <t>determine the longest leading sequence of tuples (as defined above)
@@ -287,17 +297,12 @@ Brief aggregation results in an AS_PATH that has the property
         <t>In order to ensure a consistent BGP origin AS is announced for
         aggregate BGP routes for implementations of "brief" BGP aggregation, the
         implementation should be configured to truncate the AS_PATH after the
-        right-most instance of the desired origin AS for the aggregate. The desired origin AS could be the aggregator AS itself.</t>
+        right-most instance of the desired origin AS for the aggregate. 
+	The desired origin AS could be the aggregator AS itself.</t>
 
         <t>If the resulting AS_PATH would be truncated from the otherwise
         expected result of BGP AS_PATH aggregation (an AS_SET would not be
         generated, and/or ASes are removed from the "longest leading sequence" of
-
-<!-- 
-XXX KS: "an AS_SET would be generated" was confusing... a typo? 
-s/an AS_SET would be generated, or ASes are removed/
-an AS_SET would not be generated, and/or ASes are removed /
--->
         ASes), the ATOMIC_AGGREGATE Path Attribute SHALL be attached.  This is
         consistent with the intent of Section 5.1.6 of 
         <xref target="RFC4271"/>.</t>
@@ -309,9 +314,9 @@ an AS_SET would not be generated, and/or ASes are removed /
       aggregation. In brief aggregation, the AGGREGATOR and ATOMIC_AGGREGATE
       Path Attributes are included, but the AS_PATH does not have AS_SET or
       AS_CONFED_SET path segment types. 
-See <xref target="brief-agg-example"/> for examples of 
-brief aggregation while keeping the origin AS unambiguous 
-and generating appropriate ROAs.</t>
+      See <xref target="brief-agg-example"/> for examples of 
+      brief aggregation while keeping the origin AS unambiguous 
+      and generating appropriate ROAs.</t>
 
       <t>When doing the above, operators MUST form the aggregate at the border
       in the outbound BGP policy and omit any prefixes from the AS that the
@@ -323,8 +328,7 @@ and generating appropriate ROAs.</t>
       this filtering policy.</t>
 
       <t>Operators MUST install egress filters to block data packets when the
-      destination address belongs to an internal prefix.
-	Similarly, any known
+      destination address belongs to an internal prefix. Similarly, any known
       single-homed customer prefix MUST also be included in the egress filters
       except on the interface for that customer. These safeguards mitigate looping in the
       data plane when connection to such an internal or customer prefix is
@@ -335,7 +339,7 @@ and generating appropriate ROAs.</t>
     </section>
 
     <section title="Security Considerations">
-      <t>This document obsoletes the use of aggregation techniques that create
+      <t>This document deprecates the use of aggregation techniques that create
       AS_SETs or AS_CONFED_SETs. Obsoleting these path segment types from BGP
       and removal of the related code from implementations would potentially
       decrease the attack surface for BGP. Deployments of new BGP security
@@ -410,13 +414,17 @@ and generating appropriate ROAs.</t>
     <section title="Example of Route Filtering for Aggregate Routes and its Contributors"
              anchor="filter-example">
 
-   <t> 
-Presented here is an illustration of how an AS_SET is not used when aggregating and still data-plane route loops are avoided. 
-Consider that p1/24 (from AS 64501), p2/24 (from AS 64502), p3/24 (from AS 64503), and p4/24 (from AS 64504) are aggregated by AS 64505 to p/22.
-AS_SET is not used with the aggregate p/22 but AGGREGATOR and ATOMIC AGGREGATE are used. 
-Data-plane route loops are avoided by not announcing the aggregate p/22 to the contributing ASes, i.e, AS 64501, AS 64502, AS 64503, and AS 64504.  
-Instead, as further illustration, p1/24, p2/24, and p4/24 are announced to AS 64503. The routing tables (post aggregation) of each of the ASes are depicted in the diagram below .
-</t>
+       <t> 
+       Presented here is an illustration of how an AS_SET is not used when 
+       aggregating and still data-plane route loops are avoided. 
+       Consider that p1/24 (from AS 64501), p2/24 (from AS 64502), p3/24 (from AS 64503), 
+       and p4/24 (from AS 64504) are aggregated by AS 64505 to p/22.
+       AS_SET is not used with the aggregate p/22 but AGGREGATOR and ATOMIC AGGREGATE are used. 
+       Data-plane route loops are avoided by not announcing the aggregate p/22 
+       to the contributing ASes, i.e., AS 64501, AS 64502, AS 64503, and AS 64504.  
+       Instead, as further illustration, p1/24, p2/24, and p4/24 are announced to AS 64503. 
+       The routing tables (post aggregation) of each of the ASes are depicted in the diagram below .
+       </t>
 
       <artset>
         <artwork type="ascii-art" align="center">
@@ -462,9 +470,10 @@ p4/24 AS_PATH "64504"
     </section>
     <section title="Examples of Inconsistent BGP Origin-AS Generated by
                     Traditional Brief Aggregation" anchor="brief-agg-example">
-<t>
-In the examples below, it is illustrated how brief aggregation may result in inconsistent origin AS.   
-</t>
+      <t>
+      In the examples below, it is illustrated how brief aggregation 
+      may result in inconsistent origin AS.   
+      </t>
 
       <t>AS 64500 aggregates more specific routes into 192.0.2.0/24.</t>
 
@@ -555,7 +564,7 @@ the AS_PATH is truncated to "64504".</t>  -->
         aggregate route.  Consider the case for Scenario 3, where the neighbor
         AS is the same for both R3 and R4 - AS 64504.  In such a case, an
         implementation may permit the aggregate's brief AS_PATH to be "64504", and
-a ROA would be created for the aggregate prefix with 64504 as the origin AS.
+        a ROA would be created for the aggregate prefix with 64504 as the origin AS.
 </t>
       </section>
     </section>
