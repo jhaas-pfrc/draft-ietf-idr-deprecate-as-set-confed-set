@@ -298,7 +298,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
         aggregate BGP routes for implementations of "brief" BGP aggregation, the
         implementation should be configured to truncate the AS_PATH after the
         right-most instance of the desired origin AS for the aggregate. 
-	The desired origin AS could be the aggregator AS itself.</t>
+	The desired origin AS could be the aggregating AS itself.</t>
 
         <t>If the resulting AS_PATH would be truncated from the otherwise
         expected result of BGP AS_PATH aggregation (an AS_SET would not be
