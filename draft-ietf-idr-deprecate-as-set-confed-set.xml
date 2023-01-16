@@ -15,7 +15,7 @@
 <!ENTITY rfc9319 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9319.xml">
 ]>
 
-<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-09" updates="4271 5065" obsoletes="6472" ipr="trust200902">
+<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-10" updates="4271 5065" obsoletes="6472" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
   <?rfc toc="yes" ?>
   <?rfc symrefs="yes" ?>
@@ -27,7 +27,7 @@
   <!-- Don't put each section on its own page -->
 
   <front>
-    <title abbrev="AS_SET use deprecation">Deprecation of AS_SET in BGP</title>
+    <title abbrev="AS_SET, AS_CONFED_SET use deprecation">Deprecation of AS_SET and AS_CONFED_SET in BGP</title>
 
     <author fullname="Warren Kumari" initials="W" surname="Kumari">
       <organization>Google, Inc.</organization>
@@ -105,41 +105,34 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
 
     <abstract>
       <t>BCP 172 (i.e., RFC 6472) recommends not using AS_SET and AS_CONFED_SET
-      in the Border Gateway Protocol. This document advances this recommendation
-      to a standards requirement in BGP; it proscribes the use of the AS_SET
-      type of path segments in the AS_PATH.  This is done to simplify the design
-      and implementation of BGP and to make the semantics of the originator of a
-      route clearer. This will also simplify the design, implementation, and
-      deployment of various BGP security mechanisms. This document (if approved)
-      updates RFC 4271 and RFC 5065, and obsoletes RFC 6472.</t> </abstract>
-      </front>
+      AS_PATH segment types in the Border Gateway Protocol (BGP). This document
+      advances that recommendation to a standards requirement in BGP; it
+      proscribes the use of the AS_SET and AS_CONFED_SET path segment types
+      in the AS_PATH.  This is done to simplify the design and implementation
+      of BGP and to make the semantics of the originator of a BGP route clearer.
+      This will also simplify the design, implementation, and deployment of
+      various BGP security mechanisms. This document updates RFC 4271 and RFC
+      5065, and obsoletes RFC 6472.</t>
+    </abstract>
+  </front>
 
   <middle>
     <section title="Introduction">
 
       <t>BCP 172 <xref target="RFC6472"></xref> makes a recommendation for not
       using AS_SET (see <xref target="RFC4271"></xref>) and AS_CONFED_SET (see
-      <xref target="RFC5065"></xref>) in the Border Gateway Protocol (BGP).
-      This document advances the BCP recommendation to a standards requirement
-      in BGP; it proscribes the use of the AS_SET types of path segments in the
-      AS_PATH. The purpose is to simplify the design
-      and implementation of BGP and to make the semantics of the originator of a
-      route clearer. This will also simplify the design, implementation, and
-      deployment of various BGP security mechanisms. In particular, the proscription of AS_SETs removes the possibility of ambiguity about origin AS in RPKI-based route origin validation (RPKI-ROV) <xref target="RFC6811"></xref> <xref target="RFC6907"></xref> <xref target="RFC9319"></xref>. </t> 
-
-<!-- KS: RFC 9319 is a new RFC on prudent use of maxLength in ROAs and it discusses several operational aspects of ROAs and RPKI-ROV; it is also the first RFC to formally define RPKI-ROV which is (will be) included in the official IETF Abbreviations list. --> 
-
-<!--
-KS: I was going to include the following paragraph here but then I realized that the proper operation of BGPsec requires both AS_SET and AS_CONFED_SET to be deprcated. 
-
-<t> 
-While this document proscribes the use of the AS_SET type of path segment 
-in the AS_PATH, it does not do so for the AS_CONFED_SET type.
-This is because the presence of AS_CONFED_SET does not pose a hinderance for determination the origin AS   when the final segment in an AS_PATH is 
-of type AS_CONFED_SET, the origin AS can still be determined for RPKI-ROV
-and it is simply the AS Confederation Identifier (see <xref target="5065"> <xref target="6811">).   
-</t> 
--->
+      <xref target="RFC5065"></xref>) AS_PATH path segment types in the Border
+      Gateway Protocol (BGP).  This document advances the BCP recommendation to
+      a standards requirement in BGP; it proscribes the use of the AS_SET and
+      AS_CONFED_SET types of path segments in the AS_PATH. The purpose is to
+      simplify the design and implementation of BGP and to make the semantics
+      of the originator of a BGP route clearer. This will also simplify the design,
+      implementation, and deployment of various BGP security mechanisms. In
+      particular, the proscription of AS_SETs and AS_CONFED_SETs removes the
+      possibility of ambiguity about origin AS in RPKI-based route origin
+      validation (RPKI-ROV) 
+      <xref target="RFC6811"></xref> <xref target="RFC6907"/>
+      <xref target="RFC9319"/>.</t> 
 
       <t> The AS_SET path segment in the AS_PATH attribute (Sections 4.3 and
       5.1.2 of <xref target="RFC4271"></xref>) is created by a router that is
@@ -147,56 +140,34 @@ and it is simply the AS Confederation Identifier (see <xref target="5065"> <xref
       Systems (ASes) that contributing prefixes in the aggregate have
       traversed.</t>
 
-<!--
-      The AS_CONFED_SET path segment (see <xref
-      target="RFC5065"></xref>) in the AS_PATH attribute is created by a router
-      that is performing route aggregation and contains an unordered set of
-      Member AS Numbers in the local confederation that contributing prefixes
-      in the aggregate have traversed. It is very similar to an AS_SET but is
-      used within a confederation.</t>
--->
-
-<!-- XXX JMH - confed sets will never confuse the origin AS.  This is because
-if only confederation sets are present, we're still operating within the
-context of the origin and the confederation stripping procedure will result in
-an origin AS via the Confederation Identifier.  In other circumstances,
-confederation segments MUST prepend the AS_PATH - and therefore can't be the
-origin. -->
+      <t>The AS_CONFED_SET path segment (see <xref target="RFC5065"/>) in
+      the AS_PATH attribute is created by a router that is performing route
+      aggregation and contains an unordered set of Member AS Numbers in the
+      local confederation that contributing prefixes in the aggregate have
+      traversed. It is very similar to an AS_SET but is used within a
+      confederation.</t>
 
       <t>By performing aggregation, a router is combining multiple BGP routes
       for more specific destinations into a new route for a less specific
       destination (<xref target="RFC4271"/>, Section 9.1.2.2.). Aggregation
       may blur the semantics of the origin AS for the prefix being announced by
-      producing an AS_SET.  AS_SETs can cause operational issues, such as not
-      being able to authenticate a route origin for the aggregate prefix in new
-      BGP security technologies such as those that take advantage of X.509
-      extensions for IP addresses and AS identifiers 
+      producing an AS_SET or AS_CONFED_SET.  Such sets can cause operational
+      issues, such as not being able to authenticate a route origin for the
+      aggregate prefix in new BGP security technologies such as those that take
+      advantage of X.509 extensions for IP addresses and AS identifiers 
       (<xref target="RFC3779"/>, <xref target="RFC6480"/>,
-      <xref target="RFC6811"/>, <xref target="RFC6907"/>, <xref target="RFC9319"/>,
-      <xref target="RFC8205"/>). This in turn could result in reachability
-      problems for the aggregated prefix and its components; i.e., more
-      specific prefixes.</t> 
+      <xref target="RFC6811"/>, <xref target="RFC6907"/>,
+      <xref target="RFC8205"/>, <xref target="RFC9319"/>).
+      This could result in reachability problems for the destinations
+      covered by the aggregated prefix.</t>
 
       <t>From analysis of historical Internet routing data, it is apparent that
       aggregation that involves AS_SETs is very seldom used in practice on the
-      public Internet <xref target="Analysis"/>.  When it is used, it
-      is often used incorrectly; only a single AS in the AS_SET are by far
-      the most common cases. Also, very often the same AS appears in the
+      public Internet (see <xref target="Analysis"/>).  When it is used, it
+      is often used incorrectly; only a single AS in the AS_SET is
+      the most common case <xref target="Analysis"/>. Also, very often the same AS appears in the
       AS_SEQUENCE and the AS_SET in the BGP update. The occurrence of reserved
       AS numbers (<xref target="IANA-SP-ASN"/>) is also somewhat frequent.</t>
-
-<!-- XXX JMH I am removing the following paragraph because aggregation as a feature is clearly in heavy use.  See the data for when the AGGREGATOR Path Attribute is present.  Aggregation is thus used, but the percentage of it exposing AS_SETs is the very small thing. -->
-<!--
-      <t>Because the aggregation involving AS_SETs is very rarely used,
-      the reduction in table size provided by this is extremely small, and any
-      advantage thereof is outweighed by additional complexity in BGP.  As
-      noted above, AS_SETs also pose impediments to implementation of new BGP
-      security technologies.</t>
--->
-
-<!--
-      In the past, AS_SET had been used in a few rare cases to allow route aggregation where two or more providers could form the same aggregate prefix, using the exact match of the other's aggregate prefix in some advertisement and configuring the aggregation differently elsewhere.  The key to configuring this correctly was to form the aggregate at the border in the outbound BGP policy and omit prefixes from the AS that the aggregate was being advertised to. The AS_SET therefore allowed this practice without the loss of BGP's AS_PATH loop protection.  This use of AS_SET served a purpose that fell in line with the original intended use. Without the use of AS_SET, aggregates must always contain only less-specific prefixes (not less than or equal to) and must never aggregate an exact match.
---> 
 
     </section>
 
@@ -210,67 +181,67 @@ origin. -->
 
     <section title="Recommendations">
       <t>BGP speakers conforming to this document (i.e., conformant BGP
-      speakers) SHOULD NOT locally generate BGP UPDATE messages containing AS_SET. Conformant BGP speakers SHOULD NOT send BGP UPDATE
-      messages containing AS_SETs. Upon receipt of such messages, conformant BGP
-      speakers SHOULD use the "Treat-as-withdraw" error handling behavior as per
-      <xref target="RFC7606"></xref>.</t>
+      speakers) SHOULD NOT locally generate BGP UPDATE messages containing
+      AS_SETs or AS_CONFED_SETs. Conformant BGP speakers SHOULD NOT send BGP
+      UPDATE messages containing AS_SETs or AS_CONFED_SETs. Upon receipt of
+      such messages, conformant BGP speakers SHOULD use the "treat-as-withdraw"
+      error handling behavior as per <xref target="RFC7606"/>.</t>
+      
+      <t>
+      The document uses normative language such as "SHOULD NOT send" 
+      rather than "MUST NOT send" with the intention of allowing 
+      some transition time for existing implementations and
+      avoiding abrupt disruptions for the operators currently
+      using AS_SETs or AS_CONFED_SETs. 
+      However, it is strongly urged that operators stop
+      sending UPDATEs with AS_SETs or AS_CONFED_SETs as quickly as 
+      possible to avoid having UPDATEs dropped by BGP security 
+      mechanisms such as RPKI-ROV and BGPsec. 
+      </t>
 
       <t>If a network operator wishes to consider BGP UPDATE messages with
-      AS_SETs received from an external BGP peers, they MAY have a feature
-      (knob) in their implementation to do so on a per-peer basis. The operator
-      should understand the full implications of choosing this option.</t>
-
-<!--
-This involves undoing the aggregation that was previously performed (with AS_SETs/CONFED_SETs), and announcing more specific prefixes (without AS_SETs/CONFED_SETs). 
-
-Route aggregation that was previously performed by proxy aggregation without the use of AS_SETs is still possible under some conditions. When doing this, operators MUST form the aggregate at the border in the outbound BGP policy and omit any prefixes from the AS that the aggregate is being advertised to. As with any change, the operator should understand the full implications of the change.
--->   
+      AS_SETs or AS_CONFED_SETs received from an external BGP peers, they MAY
+      have a feature (knob) in their implementation to do so on a per-peer
+      basis. The operator should understand the full implications of choosing
+      this option.</t>
 
 <!-- XXX JMH - A stub AS can happily absorb routes containing AS_SETs according to local policy, since it has no interest in propagating them to other speakers that may have RPKI origin considerations.  The consideration here applies only to transit ASes and their downstreams. -->
 
       <t>Network operators SHOULD NOT locally generate any new announcements
-      containing AS_SETs.</t>
+      containing AS_SETs or AS_CONFED_SETs.</t>
 
       <t>BGP security technologies (such as those that take advantage of X.509
       extensions for IP addresses and AS identifiers (<xref target="RFC3779"/>,
       <xref target="RFC6480"/>, <xref target="RFC6811"/>, 
       <xref target="RFC8205"/>) might not support routes with AS_SETs or
-      AS_CONFED_SETs in them. Routes with AS_SETs have no possibility of ever being considered RPKI-ROV valid <xref target="RFC6811"/> <xref target="RFC6907"/>. 
-
-</t>
+      AS_CONFED_SETs in them. Routes with AS_SETs have no possibility of ever
+      being considered RPKI-ROV valid <xref target="RFC6811"/>
+      <xref target="RFC6907"/>.</t>
     </section>
 
     <section title="Updates to Existing RFCs">
       <t>This document deprecates the origination of BGP routes with AS_SET
-      (type 1) AS_PATH segments.  (<xref target="RFC4271"/>, Section 4.3.) BGP
-      speakers conforming to this document &mdash; i.e., conformant BGP speakers &mdash;
-      SHOULD NOT originate BGP UPDATE messages containing AS_SETs.  Upon
-      receipt of BGP routes containing AS_SETs, conformant BGP speakers SHOULD
-      use the "Treat-as-withdraw" error handling behavior as per <xref
-      target="RFC7606"></xref>.</t>
+      (type 1) (see <xref target="RFC4271" section="4.3" sectionFormat="comma"/>).</t>
 
-<!-- XXX JMH - As noted above, confed sets don't hurt anything.  This text is commented out. -->
+      <t>This document also deprecates the origination of BGP routes with
+      AS_CONFED_SET (type 4) AS_PATH segments  
+      (see <xref target="RFC5065" section="3" sectionFormat="comma"/>).</t>
 
-<!--
-      <t>This document deprecates the AS_CONFED_SET (type 4) AS_PATH segment
-      type from <xref target="RFC5065"></xref>. Conformant BGP speakers MUST
-      NOT locally generate BGP UPDATE messages containing AS_CONFED_SET.
-      Conformant BGP speakers SHOULD NOT send BGP UPDATE messages containing
-      AS_CONFED_SET. Upon receipt of such messages, conformant BGP speakers
-      SHOULD use the "Treat-as-withdraw" error handling behavior as per 
-      <xref target="RFC7606"></xref>.</t>
--->
-
-<!-- XXX JMH - insert update to aggregation procedures here. -->
+      <t>BGP speakers conforming to this document &mdash; i.e., conformant BGP
+      speakers &mdash; SHOULD NOT originate BGP UPDATE messages containing
+      AS_SETs or AS_CONFED_SETs.  Upon receipt of BGP routes containing
+      AS_SETs, conformant BGP speakers SHOULD use the "treat-as-withdraw" error
+      handling behavior as per <xref target="RFC7606"/>.</t>
 
       <section title="BGP AS_PATH &quot;Brief&quot; Aggregation">
-        <t><xref target="RFC4271"/>, Sections 9.1.4 and 9.2.2.2, describes BGP
-        aggregation procedures.  <xref target="RFC4271"/>, Appendix F.6
+        <t> 
+      Sections 9.1.4 and 9.2.2.2 of <xref target="RFC4271"/> describe BGP aggregation procedures. 
+      Appendix F.6 in <xref target="RFC4271"/> 
         describes a generally unimplemented "Complex AS_PATH Aggregation"
         procedure.</t>
 
-        <t><xref target="RFC4271"/>, Section 5.1.6 describing the
-        ATOMIC_AGGREGATE Path Attribute notes that:</t>
+        <t><xref target="RFC4271" section="5.1.6" sectionFormat="comma"/>,
+        describing the ATOMIC_AGGREGATE Path Attribute, notes that:</t>
 
         <blockquote>
           <t>When a BGP speaker aggregates several routes for the purpose of
@@ -286,10 +257,11 @@ Route aggregation that was previously performed by proxy aggregation without the
           include the ATOMIC_AGGREGATE attribute.</t>
         </blockquote>
 
-        <t>When BGP AS_PATH aggregation is done according to the Section 9.2.2.2
+        <t>When BGP AS_PATH aggregation is done according to the <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>,
         procedures and any resulting AS_SETs are discarded, this is typically
-        referred to as "brief" aggreation in implementations.  This results in
-        an AS_PATH that has the property (from Section 9.2.2.2):</t>
+        referred to as "brief" aggregation in implementations.
+        Brief aggregation results in an AS_PATH that has the property 
+        (from <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>):</t>
 
         <blockquote>
           <t>determine the longest leading sequence of tuples (as defined above)
@@ -325,11 +297,12 @@ Route aggregation that was previously performed by proxy aggregation without the
         <t>In order to ensure a consistent BGP origin AS is announced for
         aggregate BGP routes for implementations of "brief" BGP aggregation, the
         implementation should be configured to truncate the AS_PATH after the
-        right-most instance of the desired origin AS for the aggregate.</t>
+        right-most instance of the desired origin AS for the aggregate. 
+	The desired origin AS could be the aggregating AS itself.</t>
 
         <t>If the resulting AS_PATH would be truncated from the otherwise
-        expected result of BGP AS_PATH aggregation (an AS_SET would be
-        generated, or ASes are removed from the "longest leading sequence" of
+        expected result of BGP AS_PATH aggregation (an AS_SET would not be
+        generated, and/or ASes are removed from the "longest leading sequence" of
         ASes), the ATOMIC_AGGREGATE Path Attribute SHALL be attached.  This is
         consistent with the intent of Section 5.1.6 of 
         <xref target="RFC4271"/>.</t>
@@ -338,8 +311,12 @@ Route aggregation that was previously performed by proxy aggregation without the
 
     <section title="Operational Considerations">
       <t>When aggregating prefixes, network operators MUST use brief
-      aggregation. In brief aggregation, the AGGREGATOR attribute is included
-      but the AS_SET attribute is not included.</t>
+      aggregation. In brief aggregation, the AGGREGATOR and ATOMIC_AGGREGATE
+      Path Attributes are included, but the AS_PATH does not have AS_SET or
+      AS_CONFED_SET path segment types. 
+      See <xref target="brief-agg-example"/> for examples of 
+      brief aggregation while keeping the origin AS unambiguous 
+      and generating appropriate ROAs.</t>
 
       <t>When doing the above, operators MUST form the aggregate at the border
       in the outbound BGP policy and omit any prefixes from the AS that the
@@ -347,16 +324,13 @@ Route aggregation that was previously performed by proxy aggregation without the
       MUST NOT be announced to the contributing ASes. Instead, more specific
       prefixes (from the aggregate) MUST be announced to each contributing AS,
       excluding any that were learned from the contributing AS in
-      consideration. For illustration, if p1/24 (from AS1), p2/24 (from AS2),
-      p3/24 (from AS3) and p4/24 (from AS4) are aggregated to p/22, then p/22
-      will not be announced to AS1, AS2, AS3, or AS4. Instead, as further
-      illustration, p1/24, p2/24 and p4/24 are announced to AS3. Or, possibly
-      q/23 (aggregate of p1/24 and p2/24) and p4/24 are announced to AS3.</t>
+      consideration.  See <xref target="filter-example"/> for an example of
+      this filtering policy.</t>
 
       <t>Operators MUST install egress filters to block data packets when the
       destination address belongs to an internal prefix. Similarly, any known
       single-homed customer prefix MUST also be included in the egress filters
-      except on the interface for that customer. This mitigates looping in the
+      except on the interface for that customer. These safeguards mitigate looping in the
       data plane when connection to such an internal or customer prefix is
       lost. This mechanism effectively compensates for the lack of the
       additional loop detection capability accorded by AS_SETs (if they were
@@ -365,13 +339,13 @@ Route aggregation that was previously performed by proxy aggregation without the
     </section>
 
     <section title="Security Considerations">
-      <t>This document obsoletes the use of aggregation techniques that create
-      AS_SETs. Obsoleting these path segment types from BGP and removal of the
-      related code from implementations would potentially decrease the attack
-      surface for BGP. Deployments of new BGP security technologies 
+      <t>This document deprecates the use of aggregation techniques that create
+      AS_SETs or AS_CONFED_SETs. Obsoleting these path segment types from BGP
+      and removal of the related code from implementations would potentially
+      decrease the attack surface for BGP. Deployments of new BGP security
+      technologies 
       (<xref target="RFC6480"/>, <xref target="RFC6811"/>, 
-      <xref target="RFC8205"/>) benefit greatly if AS_SETs are not used in
-      BGP.</t>
+      <xref target="RFC8205"/>) benefit greatly if AS_SETs and AS_CONFED_SETs are not used in BGP.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -437,5 +411,162 @@ Route aggregation that was previously performed by proxy aggregation without the
         <seriesInfo name="NIST Robust Inter-domain Routing Project Website" value="" />
       </reference>
     </references>
+    <section title="Example of Route Filtering for Aggregate Routes and its Contributors"
+             anchor="filter-example">
+
+       <t> 
+       Presented here is an illustration of how an AS_SET is not used when 
+       aggregating and still data-plane route loops are avoided. 
+       Consider that p1/24 (from AS 64501), p2/24 (from AS 64502), p3/24 (from AS 64503), 
+       and p4/24 (from AS 64504) are aggregated by AS 64505 to p/22.
+       AS_SET is not used with the aggregate p/22 but AGGREGATOR and ATOMIC AGGREGATE are used. 
+       Data-plane route loops are avoided by not announcing the aggregate p/22 
+       to the contributing ASes, i.e., AS 64501, AS 64502, AS 64503, and AS 64504.  
+       Instead, as further illustration, p1/24, p2/24, and p4/24 are announced to AS 64503. 
+       The routing tables (post aggregation) of each of the ASes are depicted in the diagram below .
+       </t>
+
+      <artset>
+        <artwork type="ascii-art" align="center">
+          <![CDATA[
+
+ (       )     (       )           (       )     (       )
+( AS64501 )   ( AS64502 )         ( AS64503 )   ( AS64504 )
+ (       )     (       )           (       )     (       )
+   p1/24         p2/24               p3/24         p4/24
+     |             |                   |             |
+     |             +-->  (       )  <--+             |
+     |                  ( AS64505 )                  |
+     +---------------->  (       )  <----------------+
+                            p/22
+                             |
+                             V
+
+AS 64501                      AS 64502
+==========================    ==========================
+p1/24 AS_PATH ""              p1/24 AS_PATH "64505 64501"
+p2/24 AS_PATH "64505 64502"   p2/24 AS_PATH ""
+p3/24 AS_PATH "64505 64503"   p3/24 AS_PATH "64505 64503"
+p4/24 AS_PATH "64505 64504"   p4/24 AS_PATH "64505 64504"
+
+
+AS 64503                      AS 64504
+==========================    ==========================
+p1/24 AS_PATH "64505 64501"   p1/24 AS_PATH "64505 64501"
+p2/24 AS_PATH "64505 64502"   p2/24 AS_PATH "64505 64502"
+p3/24 AS_PATH ""              p3/24 AS_PATH "64505 64503"
+p4/24 AS_PATH "64505 64504"   p4/24 AS_PATH ""
+
+AS 64505
+==========================
+p/22  AS_PATH "" AGGREGATOR 64505 ATOMIC_AGGREGATE
+p1/24 AS_PATH "64501"
+p2/24 AS_PATH "64502"
+p3/24 AS_PATH "64503"
+p4/24 AS_PATH "64504"
+          ]]>
+        </artwork>
+      </artset>
+    </section>
+    <section title="Examples of Inconsistent BGP Origin-AS Generated by
+                    Traditional Brief Aggregation" anchor="brief-agg-example">
+      <t>
+      In the examples below, it is illustrated how brief aggregation 
+      may result in inconsistent origin AS.   
+      </t>
+
+      <t>AS 64500 aggregates more specific routes into 192.0.2.0/24.</t>
+
+      <t>Consider the following scenarios where brief aggregation is done
+      by AS 64500 and what the resultant origin ASes would be.</t>
+
+      <artset>
+        <artwork type="ascii-art" align="left">
+          <![CDATA[
+Routes:
+R1 - 192.0.2.0/26   AS_PATH "64501"
+R2 - 192.0.2.64/26  AS_PATH "64502"
+R3 - 192.0.2.128/26 AS_PATH "64504 64502"
+R4 - 192.0.2.192/26 AS_PATH "64504 64501"
+          ]]>
+        </artwork>
+      </artset>
+
+      <section title="Scenario 1: First one route, then another, each with a
+                      fully disjoint AS_PATH">
+        <t>Receive R1. Aggregate 192.0.2.0/24 AS_PATH "64501"</t>
+        <t>Alternate "bug?": Aggregate 192.0.2.0/24 AS_PATH "[ 64501 ]"</t>
+
+        <t>Receive R2.  Aggregate 192.0.2.0/24 AS_PATH "[ 64501 64502 ]"</t>
+
+        <t>If brief aggregation is in use, the AS_PATH would be truncated to
+        the empty AS_PATH, "".</t>
+
+        <t>The resulting AS_PATH is thus not stable and depends on the presence
+        of specific routes.</t>
+      </section>
+
+      <section title="Scenario 2: First one route, then another, the AS_PATHs
+                      overlap at the origin AS.">
+        <t>Receive R1.  Aggregate 192.0.2.0/24 AS_PATH "64501"</t>
+
+        <t>Receive R4.  Aggregate 192.0.2.0/24 AS_PATH "[ 64504 64501 ]"</t>
+
+<!-- 
+XXX KS: I make a correction above from "64504 [ 64501 ]" 
+to "[ 64504 64501 ] because "[ 64504 ] 64501" does not follow
+from algorithm in RFC 4271. 64504 is not common to both
+contributing paths. So it must also be included in the AS_SET.
+-->    
+
+<!-- XXX KS: This is replaced (as below):  <t>If brief aggregation is in use, 
+the AS_PATH is truncated to "64504".</t>  -->
+
+        <t>If brief aggregation is in use,  the AS_PATH is truncated to "".</t>
+
+        <t>The resulting AS_PATH is thus not stable and depends on the presence
+        of specific routes.</t>
+      </section>
+
+      <section title="Scenario 3: First one route, then another, the AS_PATHs
+                      overlap at the neighbor AS">
+        <t>Receive R3.  Aggregate 192.0.2.0/24 AS_PATH "64504 64501".</t>
+
+        <t>Receive R4.  Aggregate 192.0.2.0/24 AS_PATH "64504 [ 64501 64502 ]"</t>
+
+        <t>If brief aggregation is in use, the AS_PATH is truncated to "64504".</t>
+
+        <t>The resulting AS_PATH is thus not stable and depends on the presence
+        of specific routes.</t>
+      </section>
+
+      <section title="Achieving Consistent Origin-AS During Aggregation">
+        <t>In the three scenarios above, the aggregating AS 64500 is using
+        traditional brief aggregation.  This results in inconsistent
+        origin ASes as the contributing routes are learned.</t>
+
+        <t>The trivial solution to addressing the issue is to simply discard
+        all of the ASes for the contributing routes. In simple BGP aggregation
+        topologies, this is likely the correct thing to do.  The AS originating
+        the aggregate, 192.0.2.0/24 in this example, is likely the resource
+        holder for the route in question.  In such a case, simply originating
+        the route to its BGP upstream neighbors in the Internet with its own
+        AS, 64500, means that a consistent Route Origin Authorization (ROA)
+        could be registered in the RPKI for this prefix.  This satisfies the
+        need for a consistent origin AS.</t>
+
+        <t>If the contributing ASes are themselves multihomed to the Internet
+        outside of their connections to AS 64500, then additional ROAs would
+        need to be created for each of the more specific prefixes.</t>
+
+        <t>In more complex proxy aggregation scenarios, there may be a desire
+        to permit some stable (i.e., common) portion of the contributing AS_PATHs to be kept in the
+        aggregate route.  Consider the case for Scenario 3, where the neighbor
+        AS is the same for both R3 and R4 - AS 64504.  In such a case, an
+        implementation may permit the aggregate's brief AS_PATH to be "64504", and
+        a ROA would be created for the aggregate prefix with 64504 as the origin AS.
+</t>
+      </section>
+    </section>
   </back>
 </rfc>
