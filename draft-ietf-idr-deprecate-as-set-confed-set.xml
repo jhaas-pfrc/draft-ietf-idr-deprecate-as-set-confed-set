@@ -596,7 +596,7 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
     <section title="Discussion on Forwarding Loops and AS_SETs"
      anchor="forwarding-loop-discussion">
       <t>In spite of the fact that BGP-4 was designed to carry CIDR routes,
-      <xref target="RFC4271"/> does not discuss the installation of discard
+      <xref target="RFC4271"/> does not discuss the installation of "discard"
       routes when implementing its aggregation procedures.  Implementations
       could originate a destination without a covering route present in the local
       routing table.</t>
@@ -614,8 +614,8 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
       specific destination and install it in its routing table since it is not
       prevented from doing so by BGP AS_PATH loop detection.  In such
       circumstances, it is critical that such Autonomous Systems implement the
-      recommendations from <xref target="RFC4632" section="5.1"/> and have
-      covering routes for all destinations it announces to external BGP
+      recommendations from Rule #2 of <xref target="RFC4632" section="5.1"/> and
+      have covering discard routes for all destinations it announces to external BGP
       speakers.</t>
 
       <t>The recommendation to filter aggregate routes from BGP peers that
