@@ -358,20 +358,10 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       <section title="Mitigating Forwarding Loops">
         <t>As discussed in <xref target="RFC4632" section="5.1"/>, 
         the presence of both less specific and more specific destinations has
-        the possibility to create forwarding loops between networks.  This can
-        occur when forwarding for a more specific destination is not fully
-        covered in the routing table of a network originating a less specific
-        destination.</t>
+        the possibility to create forwarding loops between networks.</t>
 
-        <t>Such a forwarding loop can occur when the less specific destination is
-        created by aggregating local more specific destinations and
-        the less specific aggregate route is advertised by BGP.</t>
-
-        <t>Operators MUST install in their forwarding a covering route for the
-        aggregate.  Traditionally this aggregate route will discard traffic that
-        is sent to it.  (Rule #2 of <xref target="RFC4632" section="5.1"/>.)
-        Most implementations of aggregation currently implement this
-        behavior.</t>
+        <t>BGP implementations performing aggregation MUST follow 
+        Rule #2 of <xref target="RFC4632" section="5.1"/>.</t>
 
         <t>Further discussion of forwarding loops and their relationship to
         AS_SETs can be found in <xref target="forwarding-loop-discussion"/>.</t>
