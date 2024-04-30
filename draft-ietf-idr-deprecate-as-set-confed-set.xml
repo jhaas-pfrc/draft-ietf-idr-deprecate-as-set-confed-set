@@ -295,14 +295,14 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       </section>
 
       <section title="Recommendations to Mitigate Unpredictable AS_PATH origins
-       for RPKI-ROV Purposes" anchor="deterministic-brief">
+       for RPKI-ROV Purposes" anchor="consistent-brief">
         <t>In order to ensure a consistent BGP origin AS is announced for
         aggregate BGP routes for implementations of "brief" BGP aggregation, the
         implementation should be configured to truncate the AS_PATH after the
         right-most instance of the desired origin AS for the aggregate. 
         The desired origin AS could be the aggregating AS itself.</t>
 
-        <t>This form of brief aggregation is referred to as "deterministic
+        <t>This form of brief aggregation is referred to as "consistent
         brief" BGP aggregation.</t>
 
         <t>If the resulting AS_PATH would be truncated from the otherwise
@@ -333,11 +333,11 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
     </section>
 
     <section title="Operational Considerations">
-      <section title="Implementing Deterministic Brief Aggregation">
+      <section title="Implementing consistent Brief Aggregation">
         <t>When aggregating prefixes, network operators MUST use brief
-        deterministic aggregation as described in 
-        <xref target="deterministic-brief"/>.
-        In deterministic brief aggregation, the AGGREGATOR and ATOMIC_AGGREGATE
+        consistent aggregation as described in 
+        <xref target="consistent-brief"/>.
+        In consistent brief aggregation, the AGGREGATOR and ATOMIC_AGGREGATE
         Path Attributes are included, but the AS_PATH does not have AS_SET or
         AS_CONFED_SET path segment types. 
         See <xref target="brief-agg-example"/> for examples of 
@@ -566,8 +566,8 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
         <t>In the three scenarios above, the aggregating AS 64500 is using
         traditional brief aggregation.  This results in inconsistent
         origin ASes as the contributing routes are learned.  This motivates the
-        "deterministic brief" BGP aggregation discussed in 
-        <xref target="deterministic-brief"/>.</t>
+        "consistent brief" BGP aggregation discussed in 
+        <xref target="consistent-brief"/>.</t>
 
         <t>The trivial solution to addressing the issue is to simply discard
         all of the ASes for the contributing routes. In simple BGP aggregation
