@@ -3,6 +3,7 @@
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc4271 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4271.xml">
 <!ENTITY rfc4632 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
+<!ENTITY rfc4893 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4893.xml">
 <!ENTITY rfc5065 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5065.xml">
 <!ENTITY rfc3779 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3779.xml">
 <!ENTITY rfc6472 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6472.xml">
@@ -311,6 +312,24 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
         consistent with the intent of Section 5.1.6 of 
         <xref target="RFC4271"/>.</t>
       </section>
+
+      <section title="Interactions with Four-octet AS Numbers">
+        <t><xref target="RFC4893"/> created support for four-octet AS numbers in
+        BGP.  A BGP speaker not supporting four-octet AS numbers, termed an "OLD
+        speaker" in that document, might have routes that carry the AS4_PATH
+        Path Atribute.  This attribute is used to carry four-octet AS paths
+        across OLD speakers and may contain AS_PATH segments of type AS_SET.</t>
+
+        <t>BGP speakers conforming to this specification MUST NOT use the
+        information contained in the AS4_PATH for treat-as-withdraw purposes.
+        Instead, only the AS_PATH should be used.</t>
+
+        <t>Aggregation of routes containing the AS4_PATH by OLD speakers can
+        result in inconsistencies between the AS_PATH and the AS4_PATH which
+        reconstruction of the AS_PATH by a NEW speaker that has received an OLD
+        speaker's AS_PATH and AS4_PATH.  See 
+        <xref target="RFC4893" section="4.2.3"/> for details.</t>
+      </section>
     </section>
 
     <section title="Operational Considerations">
@@ -389,6 +408,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       &rfc2119;
       &rfc4271;
       &rfc4632;
+      &rfc4893;
       &rfc5065;
     </references>
 
