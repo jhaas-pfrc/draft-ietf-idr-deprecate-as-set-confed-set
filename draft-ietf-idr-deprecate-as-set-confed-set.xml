@@ -603,7 +603,7 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
       could originate a destination without a covering route present in the local
       routing table.</t>
 
-      <t>When aggregating more specific routes according to 
+      <t>When aggregating more specific routes according to
       <xref target="RFC4271"/> aggregation procedures, the aggregating BGP
       speaker will place contributing routes into the generated AS_PATH, perhaps
       using AS_SETs.  As a result, a contributing AS will not install the
@@ -617,9 +617,9 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
       prevented from doing so by BGP AS_PATH loop detection. This gives rise to
       the possibility of forwarding loops. To help prevent forwarding loops,
       it is critical to adhere to the following:</t>
-        <nl>
+        <ol>
           <li>Rule #2 of <xref target="RFC4632" section="5.1"/>:
-          A router that generates an aggregate route for multiple, 
+          A router that generates an aggregate route for multiple,
           more-specific routes must discard packets that match the aggregate
           route, but not any of the more-specific routes.  In other words,
           the "next hop" for the aggregate route should be the null
@@ -627,7 +627,7 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
           <li> Not advertising aggregate routes to contributing ASes
           as specified in <xref target="filtering-to-contributors"/>
           of this document.</li>
-        </nl>      
+        </ol>      
     </section>
   </back>
 </rfc>
