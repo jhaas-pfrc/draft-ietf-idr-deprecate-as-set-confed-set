@@ -2,6 +2,8 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc4271 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4271.xml">
+<!ENTITY rfc4632 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
+<!ENTITY rfc4893 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4893.xml">
 <!ENTITY rfc5065 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5065.xml">
 <!ENTITY rfc3779 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3779.xml">
 <!ENTITY rfc6472 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6472.xml">
@@ -15,7 +17,7 @@
 <!ENTITY rfc9319 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9319.xml">
 ]>
 
-<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-10" updates="4271 5065" obsoletes="6472" ipr="trust200902">
+<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-13" updates="4271 5065" obsoletes="6472" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
   <?rfc toc="yes" ?>
   <?rfc symrefs="yes" ?>
@@ -257,8 +259,8 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
           include the ATOMIC_AGGREGATE attribute.</t>
         </blockquote>
 
-        <t>When BGP AS_PATH aggregation is done according to the <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>,
-        procedures and any resulting AS_SETs are discarded, this is typically
+        <t>When BGP AS_PATH aggregation is done according to the <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>
+        procedures, and any resulting AS_SETs are discarded, this is typically
         referred to as "brief" aggregation in implementations.
         Brief aggregation results in an AS_PATH that has the property 
         (from <xref target="RFC4271" section="9.2.2.2" sectionFormat="comma"/>):</t>
@@ -292,50 +294,79 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
         </ul>
       </section>
 
-      <section title="Recommendations to Mitigate Unpredictable AS_PATH origins
-       for RPKI-ROV Purposes">
+      <section title="Recommendations to Mitigate Unpredictable AS_PATH Origins
+       for RPKI-ROV Purposes" anchor="consistent-brief">
         <t>In order to ensure a consistent BGP origin AS is announced for
         aggregate BGP routes for implementations of "brief" BGP aggregation, the
         implementation should be configured to truncate the AS_PATH after the
         right-most instance of the desired origin AS for the aggregate. 
-	The desired origin AS could be the aggregating AS itself.</t>
+        The desired origin AS could be the aggregating AS itself.</t>
+
+        <t>This form of brief aggregation is referred to as "consistent
+        brief" BGP aggregation.</t>
 
         <t>If the resulting AS_PATH would be truncated from the otherwise
         expected result of BGP AS_PATH aggregation (an AS_SET would not be
-        generated, and/or ASes are removed from the "longest leading sequence" of
+        generated and ASes are removed from the "longest leading sequence" of
         ASes), the ATOMIC_AGGREGATE Path Attribute SHALL be attached.  This is
         consistent with the intent of Section 5.1.6 of 
         <xref target="RFC4271"/>.</t>
       </section>
+
+      <section title="Interactions with Four-octet AS Numbers">
+        <t><xref target="RFC4893"/> created support for four-octet AS numbers in
+        BGP.  A BGP speaker not supporting four-octet AS numbers, termed an "OLD
+        speaker" in that document, might have routes that carry the AS4_PATH
+        Path Attribute.  This attribute is used to carry four-octet AS paths
+        across OLD speakers and may contain AS_PATH segments of type AS_SET.</t>
+
+        <t>BGP speakers conforming to this specification MUST NOT use the
+        information contained in the AS4_PATH for treat-as-withdraw purposes.
+        Instead, only the AS_PATH should be used.</t>
+
+        <t>Aggregation of routes containing the AS4_PATH by OLD speakers can
+        result in inconsistencies between the AS_PATH and the AS4_PATH which
+        cause problems for
+        reconstruction of the AS_PATH by a NEW speaker that has received an OLD
+        speaker's AS_PATH and AS4_PATH.  See 
+        <xref target="RFC4893" section="4.2.3"/> for details.</t>
+      </section>
     </section>
 
     <section title="Operational Considerations">
-      <t>When aggregating prefixes, network operators MUST use brief
-      aggregation. In brief aggregation, the AGGREGATOR and ATOMIC_AGGREGATE
-      Path Attributes are included, but the AS_PATH does not have AS_SET or
-      AS_CONFED_SET path segment types. 
-      See <xref target="brief-agg-example"/> for examples of 
-      brief aggregation while keeping the origin AS unambiguous 
-      and generating appropriate ROAs.</t>
+      <section title="Implementing Consistent Brief Aggregation">
+        <t>When aggregating prefixes, network operators MUST use
+        consistent brief aggregation as described in 
+        <xref target="consistent-brief"/>.
+        In consistent brief aggregation, the AGGREGATOR and ATOMIC_AGGREGATE
+        Path Attributes are included, but the AS_PATH does not have AS_SET or
+        AS_CONFED_SET path segment types. 
+        See <xref target="brief-agg-example"/> for examples of 
+        brief aggregation while keeping the origin AS unambiguous 
+        and generating appropriate ROAs.</t>
+      </section>
 
-      <t>When doing the above, operators MUST form the aggregate at the border
-      in the outbound BGP policy and omit any prefixes from the AS that the
-      aggregate is being advertised to. In other words, an aggregate prefix
-      MUST NOT be announced to the contributing ASes. Instead, more specific
-      prefixes (from the aggregate) MUST be announced to each contributing AS,
-      excluding any that were learned from the contributing AS in
-      consideration.  See <xref target="filter-example"/> for an example of
-      this filtering policy.</t>
+      <section title="Not Advertising Aggregate Routes to Contributing ASes"
+       anchor="filtering-to-contributors">
+        <t>An aggregate prefix
+        MUST NOT be announced to the contributing ASes. Instead, more specific
+        prefixes (from the aggregate) MUST be announced to each contributing AS,
+        excluding any that were learned from the contributing AS in
+        consideration.  See <xref target="filter-example"/> for an example of
+        this filtering policy.</t>
+      </section>
 
-      <t>Operators MUST install egress filters to block data packets when the
-      destination address belongs to an internal prefix. Similarly, any known
-      single-homed customer prefix MUST also be included in the egress filters
-      except on the interface for that customer. These safeguards mitigate looping in the
-      data plane when connection to such an internal or customer prefix is
-      lost. This mechanism effectively compensates for the lack of the
-      additional loop detection capability accorded by AS_SETs (if they were
-      allowed).</t>
+      <section title="Mitigating Forwarding Loops">
+        <t>As discussed in <xref target="RFC4632" section="5.1"/>, 
+        the presence of both less specific and more specific destinations has
+        the possibility to create forwarding loops between networks.</t>
 
+        <t>BGP implementations performing aggregation MUST follow 
+        Rule #2 of <xref target="RFC4632" section="5.1"/>.</t>
+
+        <t>Further discussion of forwarding loops and their relationship to
+        AS_SETs can be found in <xref target="forwarding-loop-discussion"/>.</t>
+      </section>
     </section>
 
     <section title="Security Considerations">
@@ -344,7 +375,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       and removal of the related code from implementations would potentially
       decrease the attack surface for BGP. Deployments of new BGP security
       technologies 
-      (<xref target="RFC6480"/>, <xref target="RFC6811"/>, 
+      (e.g., <xref target="RFC6480"/>, <xref target="RFC6811"/>, 
       <xref target="RFC8205"/>) benefit greatly if AS_SETs and AS_CONFED_SETs are not used in BGP.</t>
     </section>
 
@@ -367,6 +398,8 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
     <references title="Normative References">
       &rfc2119;
       &rfc4271;
+      &rfc4632;
+      &rfc4893;
       &rfc5065;
     </references>
 
@@ -423,7 +456,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
        Data-plane route loops are avoided by not announcing the aggregate p/22 
        to the contributing ASes, i.e., AS 64501, AS 64502, AS 64503, and AS 64504.  
        Instead, as further illustration, p1/24, p2/24, and p4/24 are announced to AS 64503. 
-       The routing tables (post aggregation) of each of the ASes are depicted in the diagram below .
+       The routing tables (post aggregation) of each of the ASes are depicted in the diagram below.
        </t>
 
       <artset>
@@ -468,11 +501,11 @@ p4/24 AS_PATH "64504"
         </artwork>
       </artset>
     </section>
-    <section title="Examples of Inconsistent BGP Origin-AS Generated by
+    <section title="Examples of Consistent and Inconsistent BGP Origin-AS Generated by
                     Traditional Brief Aggregation" anchor="brief-agg-example">
       <t>
-      In the examples below, it is illustrated how brief aggregation 
-      may result in inconsistent origin AS.   
+      In the examples below, it is illustrated how traditional brief aggregation
+      may result in an inconsistent origin AS.   
       </t>
 
       <t>AS 64500 aggregates more specific routes into 192.0.2.0/24.</t>
@@ -512,16 +545,6 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
 
         <t>Receive R4.  Aggregate 192.0.2.0/24 AS_PATH "[ 64504 64501 ]"</t>
 
-<!-- 
-XXX KS: I make a correction above from "64504 [ 64501 ]" 
-to "[ 64504 64501 ] because "[ 64504 ] 64501" does not follow
-from algorithm in RFC 4271. 64504 is not common to both
-contributing paths. So it must also be included in the AS_SET.
--->    
-
-<!-- XXX KS: This is replaced (as below):  <t>If brief aggregation is in use, 
-the AS_PATH is truncated to "64504".</t>  -->
-
         <t>If brief aggregation is in use,  the AS_PATH is truncated to "".</t>
 
         <t>The resulting AS_PATH is thus not stable and depends on the presence
@@ -543,7 +566,10 @@ the AS_PATH is truncated to "64504".</t>  -->
       <section title="Achieving Consistent Origin-AS During Aggregation">
         <t>In the three scenarios above, the aggregating AS 64500 is using
         traditional brief aggregation.  This results in inconsistent
-        origin ASes as the contributing routes are learned.</t>
+        origin ASes as the contributing routes are learned.  This motivates the
+        "consistent brief" BGP aggregation mentioned in 
+        <xref target="consistent-brief"/> and discussed further 
+        with examples below.</t>
 
         <t>The trivial solution to addressing the issue is to simply discard
         all of the ASes for the contributing routes. In simple BGP aggregation
@@ -553,7 +579,7 @@ the AS_PATH is truncated to "64504".</t>  -->
         the route to its BGP upstream neighbors in the Internet with its own
         AS, 64500, means that a consistent Route Origin Authorization (ROA)
         could be registered in the RPKI for this prefix.  This satisfies the
-        need for a consistent origin AS.</t>
+        need for a consistent (unambiguous) origin AS.</t>
 
         <t>If the contributing ASes are themselves multihomed to the Internet
         outside of their connections to AS 64500, then additional ROAs would
@@ -567,6 +593,41 @@ the AS_PATH is truncated to "64504".</t>  -->
         a ROA would be created for the aggregate prefix with 64504 as the origin AS.
 </t>
       </section>
+    </section>
+
+    <section title="Discussion on Forwarding Loops and AS_SETs"
+     anchor="forwarding-loop-discussion">
+      <t>Although BGP-4 was designed to carry CIDR routes,
+      <xref target="RFC4271"/> does not discuss the installation of "discard"
+      or "null" routes when implementing its aggregation procedures.  Implementations
+      could originate a destination without a covering route present in the local
+      routing table.</t>
+
+      <t>When aggregating more specific routes according to
+      <xref target="RFC4271"/> aggregation procedures, the aggregating BGP
+      speaker will place contributing routes into the generated AS_PATH, perhaps
+      using AS_SETs.  As a result, a contributing AS will not install the
+      aggregated route into its RIB since the route is an AS_PATH loop.  This
+      provides a form of protection against forwarding loops created by BGP
+      aggregation.</t>
+
+      <t>When brief aggregation methods are used, a BGP speaker may receive a
+      route containing such less specific destination covering a local more
+      specific destination and install it in its routing table since it is not
+      prevented from doing so by BGP AS_PATH loop detection. This gives rise to
+      the possibility of forwarding loops. To help prevent forwarding loops,
+      it is critical to adhere to the following:</t>
+        <ol>
+          <li>Rule #2 of <xref target="RFC4632" section="5.1"/>:
+          A router that generates an aggregate route for multiple,
+          more-specific routes must discard packets that match the aggregate
+          route, but not any of the more-specific routes.  In other words,
+          the "next hop" for the aggregate route should be the null
+          destination.</li>
+          <li> Not advertising aggregate routes to contributing ASes
+          as specified in <xref target="filtering-to-contributors"/>
+          of this document.</li>
+        </ol>      
     </section>
   </back>
 </rfc>
