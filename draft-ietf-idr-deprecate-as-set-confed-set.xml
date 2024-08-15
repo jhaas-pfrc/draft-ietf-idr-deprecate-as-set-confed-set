@@ -3,11 +3,11 @@
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc4271 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4271.xml">
 <!ENTITY rfc4632 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4632.xml">
-<!ENTITY rfc4893 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4893.xml">
+<!ENTITY rfc6793 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6793.xml">
 <!ENTITY rfc5065 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5065.xml">
 <!ENTITY rfc3779 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3779.xml">
 <!ENTITY rfc6472 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6472.xml">
-<!ENTITY rfc6482 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6482.xml">
+<!ENTITY rfc9582 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9582.xml">
 <!ENTITY rfc6480 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6480.xml">
 <!ENTITY rfc6811 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6811.xml">
 <!ENTITY rfc6907 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6907.xml">
@@ -15,9 +15,10 @@
 <!ENTITY rfc8205 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8205.xml">
 <!ENTITY rfc8174 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY rfc9319 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9319.xml">
+<!ENTITY I-D.ietf-sidrops-aspa-verification SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-sidrops-aspa-verification.xml">
 ]>
 
-<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-13" updates="4271 5065" obsoletes="6472" ipr="trust200902">
+<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-15" updates="4271 5065" obsoletes="6472" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
   <?rfc toc="yes" ?>
   <?rfc symrefs="yes" ?>
@@ -109,14 +110,14 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       <t>BCP 172 (i.e., RFC 6472) recommends not using AS_SET and AS_CONFED_SET
       AS_PATH segment types in the Border Gateway Protocol (BGP). This document
       advances that recommendation to a standards requirement in BGP; it
-      proscribes the use of the AS_SET and AS_CONFED_SET path segment types
+      prohibits the use of the AS_SET and AS_CONFED_SET path segment types
       in the AS_PATH.  This is done to simplify the design and implementation
       of BGP and to make the semantics of the originator of a BGP route clearer.
       This will also simplify the design, implementation, and deployment of
       various BGP security mechanisms. This document updates RFC 4271 by
-      deprecating the origination of BGP routes with AS_SET (type 1) and
-      also updates RFC 5065 by deprecating the origination of BGP
-      routes with AS_CONFED_SET (type 4) AS_PATH segments.
+      deprecating the origination of BGP routes with AS_SET (Type 1 AS_PATH segment) and
+      updates RFC 5065 by deprecating the origination of BGP
+      routes with AS_CONFED_SET (Type 4 AS_PATH segment).
       Finally, it obsoletes RFC 6472.</t>
     </abstract>
   </front>
@@ -133,7 +134,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       simplify the design and implementation of BGP and to make the semantics
       of the originator of a BGP route clearer. This will also simplify the design,
       implementation, and deployment of various BGP security mechanisms. In
-      particular, the proscription of AS_SETs and AS_CONFED_SETs removes the
+      particular, the prohibition of AS_SETs and AS_CONFED_SETs removes the
       possibility of ambiguity about origin AS in RPKI-based route origin
       validation (RPKI-ROV)
       <xref target="RFC6811"></xref> <xref target="RFC6907"/>
@@ -184,46 +185,73 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       they appear in all capitals, as shown here.</t>
     </section>
 
-    <section title="Recommendations">
-      <t>BGP speakers conforming to this document (i.e., conformant BGP
-      speakers) SHOULD NOT locally generate BGP UPDATE messages containing
-      AS_SETs or AS_CONFED_SETs. Conformant BGP speakers SHOULD NOT send BGP
-      UPDATE messages containing AS_SETs or AS_CONFED_SETs. Upon receipt of
-      such messages, conformant BGP speakers SHOULD use the "treat-as-withdraw"
-      error handling behavior as per <xref target="RFC7606"/>.</t>
+    <section title="Recommendations" anchor="recs">
 
-      <t>
-      The document uses normative language such as "SHOULD NOT send"
-      rather than "MUST NOT send" with the intention of allowing
-      some transition time for existing implementations and
-      avoiding abrupt disruptions for the operators currently
-      using AS_SETs or AS_CONFED_SETs.
-      However, it is strongly urged that operators stop
-      sending UPDATEs with AS_SETs or AS_CONFED_SETs as quickly as
-      possible to avoid having UPDATEs dropped by BGP security
-      mechanisms such as RPKI-ROV and BGPsec.
+      <t>Unless explicitly configured by a network operator to do otherwise 
+         (e.g., during a transition phase), BGP speakers:
+        <ul>
+          <li>MUST NOT advertise BGP UPDATE messages containing AS_SETs or AS_CONFED_SETs, and</li>
+          <li>Upon reception of BGP UPDATE messages containing AS_SETs or AS_CONFED_SETs 
+              in the AS_PATH, MUST use the "treat-as-withdraw" error handling 
+              behavior as per <xref target="RFC7606"/>.</li>
+        </ul>
       </t>
 
-      <t>If a network operator wishes to consider BGP UPDATE messages with
+      <t>Per above specifications, this document updates RFC 4271 and RFC 5065 
+      by deprecating AS_SET (see <xref target="RFC4271" section="4.3" sectionFormat="comma"/>) 
+      and AS_CONFED_SET (see <xref target="RFC5065" section="3" sectionFormat="comma"/>), respectively.</t>
+
+      <section title="Considerations for AS4_PATH">
+        <t><xref target="RFC6793"/> created support for four-octet AS numbers in
+        BGP using the optional transitive AS4_PATH attribute.
+        The mandatory AS_PATH attribute is always present in a route <xref target="RFC4271"/>,
+        while the AS4_PATH may or may not be present.
+        If both AS_PATH and AS4_PATH attributes are present,
+        an AS_SET present in one would also be necessarily present in the other.
+        So, it is sufficient to perform the "treat-as-withdraw" error handling as
+        specified above using the AS_PATH alone.</t>
+        
+<!-- XXX KS - the following para is true in general and not specific to
+     deprecation of AS_SET. This is covered in RFC6793. No use for it here
+     except for causing confusion.
+        <t>Aggregation of routes containing the AS4_PATH by OLD speakers can
+        result in inconsistencies between the AS_PATH and the AS4_PATH which
+        cause problems for
+        reconstruction of the AS_PATH by a NEW speaker that has received an OLD
+        speaker's AS_PATH and AS4_PATH.  See
+        <xref target="RFC6793" section="4.2.3"/> for details.</t>
+-->
+      </section>
+    </section>
+
+      <!-- <t>If a network operator wishes to consider BGP UPDATE messages with
       AS_SETs or AS_CONFED_SETs received from an external BGP peers, they MAY
       have a feature (knob) in their implementation to do so on a per-peer
       basis. The operator should understand the full implications of choosing
       this option.</t>
+      XXX KS - I think this paragraph is not needed considering that we have already said in the revised text above that network operators can make exceptions to the default with explicit configuration. -->    
 
 <!-- XXX JMH - A stub AS can happily absorb routes containing AS_SETs according to local policy, since it has no interest in propagating them to other speakers that may have RPKI origin considerations.  The consideration here applies only to transit ASes and their downstreams. -->
 
+<!-- XXX KS - the following text is a repeat of the text in the first paragraph:
       <t>Network operators SHOULD NOT locally generate any new announcements
-      containing AS_SETs or AS_CONFED_SETs.</t>
+      containing AS_SETs or AS_CONFED_SETs.</t> -->
 
-      <t>BGP security technologies (such as those that take advantage of X.509
-      extensions for IP addresses and AS identifiers (<xref target="RFC3779"/>,
-      <xref target="RFC6480"/>, <xref target="RFC6811"/>,
-      <xref target="RFC8205"/>) might not support routes with AS_SETs or
-      AS_CONFED_SETs in them. Routes with AS_SETs have no possibility of ever
-      being considered RPKI-ROV valid <xref target="RFC6811"/>
-      <xref target="RFC6907"/>.</t>
+    <section title="Treatment of Routes with AS_SET in RPKI-based BGP Security">
+      <t>Resource Public Key Infrastructure (RPKI) <xref target="RFC6480"/> uses X.509
+      extensions for IP addresses and AS identifiers <xref target="RFC3779"/>.
+      RPKI-based Route Origin Validation (ROV) <xref target="RFC6811"/> <xref target="RFC6907"/> 
+      is a BGP security technology that never allows a route with AS_SET to be considered Valid. 
+      BGPsec <xref target="RFC8205"/> and Autonomous System Provider Authorization (ASPA) 
+      <xref target="I-D.ietf-sidrops-aspa-verification"/> are also BGP security technologies 
+      based on RPKI. BGPsec does not support AS_SETs. In ASPA-based AS_PATH verification, 
+      a route with AS_SET is always considered Invalid and hence ineligible for route selection.</t>
     </section>
-
+<!-- XXX KS - The Section below is now summarized in paragraph 2 
+     in the above "Recommendations" section. The third paragaprh below 
+     is a repeat of what is already said in the "Recommendations". 
+     These changes are based on Alvaro's suggestion to keep 
+     all specifications together in one place.  
     <section title="Updates to Existing RFCs">
       <t>This document deprecates the origination of BGP routes with AS_SET
       (type 1) (see <xref target="RFC4271" section="4.3" sectionFormat="comma"/>).</t>
@@ -237,13 +265,16 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       AS_SETs or AS_CONFED_SETs.  Upon receipt of BGP routes containing
       AS_SETs, conformant BGP speakers SHOULD use the "treat-as-withdraw" error
       handling behavior as per <xref target="RFC7606"/>.</t>
+-->
 
       <section title="BGP AS_PATH &quot;Brief&quot; Aggregation">
         <t>
       Sections 9.1.4 and 9.2.2.2 of <xref target="RFC4271"/> describe BGP aggregation procedures.
       Appendix F.6 in <xref target="RFC4271"/>
-        describes a generally unimplemented "Complex AS_PATH Aggregation"
+        describes a generally less utilized "Complex AS_PATH Aggregation"
         procedure.</t>
+<!-- XXX KS - in the above did this: s/a generally unimplemented/a generally less utilized/. 
+     This is in response to Keyur's comment. -->
 
         <t><xref target="RFC4271" section="5.1.6" sectionFormat="comma"/>,
         describing the ATOMIC_AGGREGATE Path Attribute, notes that:</t>
@@ -277,12 +308,14 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
 
         <t>The ATOMIC_AGGREGATE Path Attribute is subsequently attached to the
         BGP route, if AS_SETs are dropped.</t>
-      </section>
+
 
       <section title="Issues with &quot;Brief&quot; AS_PATH Aggregation and RPKI-ROV">
         <t>While brief AS_PATH aggregation has the desirable property of not
         containing AS_SETs, the resulting aggregated AS_PATH may contain an
-        unpredictable origin AS.  Such an unpredictable origin ASes may result
+        unpredictable origin AS.
+        This is because the aggregating AS may be different from the purported origin AS (for the aggregate), which may vary as explained below.
+        Such an unpredictable origin ASes may result
         in RPKI-ROV validation issues:</t>
 
         <ul>
@@ -291,49 +324,31 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
           <li>The presence of expected contributing routes may be unpredictable
           due to route availability from BGP neighbors.</li>
           <li>In the presence of such varying origin ASes, it would be necessary
-          for the resource holder to register <xref target="RFC6482">Route
-          Origin Authorizations (ROAs)</xref> for each potential origin AS that
+          for the resource holder to register Route
+          Origin Authorizations (ROAs) <xref target="RFC9582"></xref> for each potential origin AS that
           may result from the expected aggregated AS_PATHs.</li>
         </ul>
       </section>
 
       <section title="Recommendations to Mitigate Unpredictable AS_PATH Origins
        for RPKI-ROV Purposes" anchor="consistent-brief">
-        <t>In order to ensure a consistent BGP origin AS is announced for
+        <t>To ensure a consistent BGP origin AS is announced for
         aggregate BGP routes for implementations of "brief" BGP aggregation, the
-        implementation should be configured to truncate the AS_PATH after the
+        implementation MUST be configured to truncate the AS_PATH after the
         right-most instance of the desired origin AS for the aggregate.
-        The desired origin AS could be the aggregating AS itself.</t>
+        The desired origin AS could be the aggregating AS itself.
+        A ROA would be necessary for the aggregate prefix with the desired origin AS.</t>
 
         <t>This form of brief aggregation is referred to as "consistent
         brief" BGP aggregation.</t>
 
         <t>If the resulting AS_PATH would be truncated from the otherwise
         expected result of BGP AS_PATH aggregation (an AS_SET would not be
-        generated and ASes are removed from the "longest leading sequence" of
-        ASes), the ATOMIC_AGGREGATE Path Attribute SHALL be attached.  This is
-        consistent with the intent of Section 5.1.6 of
-        <xref target="RFC4271"/>.</t>
+        generated and possibly some ASes are removed from the "longest leading sequence" of
+        ASes), the ATOMIC_AGGREGATE Path Attribute SHOULD be attached.  This is
+        consistent with the intent of <xref target="RFC4271" section="5.1.6" sectionFormat="comma"/>.</t>
       </section>
 
-      <section title="Interactions with Four-octet AS Numbers">
-        <t><xref target="RFC4893"/> created support for four-octet AS numbers in
-        BGP.  A BGP speaker not supporting four-octet AS numbers, termed an "OLD
-        speaker" in that document, might have routes that carry the AS4_PATH
-        Path Attribute.  This attribute is used to carry four-octet AS paths
-        across OLD speakers and may contain AS_PATH segments of type AS_SET.</t>
-
-        <t>BGP speakers conforming to this specification MUST NOT use the
-        information contained in the AS4_PATH for treat-as-withdraw purposes.
-        Instead, only the AS_PATH should be used.</t>
-
-        <t>Aggregation of routes containing the AS4_PATH by OLD speakers can
-        result in inconsistencies between the AS_PATH and the AS4_PATH which
-        cause problems for
-        reconstruction of the AS_PATH by a NEW speaker that has received an OLD
-        speaker's AS_PATH and AS4_PATH.  See
-        <xref target="RFC4893" section="4.2.3"/> for details.</t>
-      </section>
     </section>
 
     <section title="Operational Considerations">
@@ -387,12 +402,13 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
     </section>
 
     <section title="Acknowledgements">
-      <t>The authors would like to thank John Heasley, Job Snijders, Jared
-      Mauch, Jakob Heitz, Keyur Patel, Douglas Montgomery, Randy Bush, Susan
-      Hares, John Scudder, Curtis Villamizar, Danny McPherson, Chris Morrow,
+      <t>The authors would like to thank Alvaro Retana, Ketan Talaulikar, 
+      Keyur Patel, Susan Hares, Nick Hilliard, Robert Raszuk, 
+      John Heasley, Job Snijders, Jared Mauch, Jakob Heitz, 
+      Douglas Montgomery, Randy Bush, John Scudder, Curtis Villamizar, Danny McPherson, Chris Morrow,
       Tom Petch, Ilya Varlashkin, Enke Chen, Tony Li, Florian Weimer, John
       Leslie, Paul Jakma, Rob Austein, Russ Housley, Sandra Murphy, Steve
-      Bellovin, Steve Kent, Steve Padgett, Alfred Hoenes, and Alvaro Retana for
+      Bellovin, Steve Kent, Steve Padgett, and Alfred Hoenes for
       comments and suggestions.</t>
     </section>
   </middle>
@@ -402,8 +418,10 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       &rfc2119;
       &rfc4271;
       &rfc4632;
-      &rfc4893;
       &rfc5065;
+      &rfc6793;
+      &rfc7606;
+      &rfc8174;
     </references>
 
     <references title="Informative References">
@@ -411,12 +429,11 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       &rfc6472;
       &rfc6811;
       &rfc6480;
-      &rfc6482;
+      &rfc9582;
       &rfc6907;
-      &rfc7606;
       &rfc8205;
-      &rfc8174;
       &rfc9319;
+      &I-D.ietf-sidrops-aspa-verification;
 
       <reference anchor="IANA-SP-ASN"
        target="https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml">
@@ -524,6 +541,28 @@ R1 - 192.0.2.0/26   AS_PATH "64501"
 R2 - 192.0.2.64/26  AS_PATH "64502"
 R3 - 192.0.2.128/26 AS_PATH "64504 64502"
 R4 - 192.0.2.192/26 AS_PATH "64504 64501"
+
+           (       )                        (       )         
+          ( AS64501 )                      ( AS64502 )
+           (       )                        (       )
+192.0.2.0/26    192.0.2.192/26    192.0.2.128/26  192.0.2.64/26
+     |                      |      |                 |
+     |                      |      |                 |
+     |                      \/    \/                 |
+     |                     (        )                |
+     |                    (  AS64504 )               |
+     |                     (        )                |
+     |                      |      |                 |
+     |                   R4 |      | R3              |
+     |                      |      |                 |
+     |                      \/    \/                 |
+     |                     (         )               |
+     +------------ R1 --->(  AS64500  )<--- R2 ------+             |
+                           (         )  
+                                |                    
+                                | (announcing
+                                |  aggregate 192.0.2.0/24)
+                               \/
           ]]>
         </artwork>
       </artset>
@@ -532,6 +571,7 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
                       fully disjoint AS_PATH">
         <t>Receive R1. Aggregate 192.0.2.0/24 AS_PATH "64501"</t>
         <t>Alternate "bug?": Aggregate 192.0.2.0/24 AS_PATH "[ 64501 ]"</t>
+        <t>(Note: AS numbers within square brackets represent an AS_SET.)</t>
 
         <t>Receive R2.  Aggregate 192.0.2.0/24 AS_PATH "[ 64501 64502 ]"</t>
 
@@ -603,7 +643,8 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
       <t>Although BGP-4 was designed to carry CIDR routes,
       <xref target="RFC4271"/> does not discuss the installation of "discard"
       or "null" routes when implementing its aggregation procedures.  Implementations
-      could originate a destination without a covering route present in the local
+      could originate an aggregate prefix without a covering route
+      for a more-specific prefix (subsumed by the aggregate prefix) present in the local
       routing table.</t>
 
       <t>When aggregating more specific routes according to
@@ -629,7 +670,7 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
           destination.</li>
           <li> Not advertising aggregate routes to contributing ASes
           as specified in <xref target="filtering-to-contributors"/>
-          of this document.</li>
+          of this document (also see <xref target="filter-example"/>).</li>
         </ol>
     </section>
   </back>
