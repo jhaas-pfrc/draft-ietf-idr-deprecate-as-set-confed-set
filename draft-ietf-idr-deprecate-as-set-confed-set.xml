@@ -210,32 +210,9 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
         an AS_SET present in one would also be necessarily present in the other.
         So, it is sufficient to perform the "treat-as-withdraw" error handling as
         specified above using the AS_PATH alone.</t>
-        
-<!-- XXX KS - the following para is true in general and not specific to
-     deprecation of AS_SET. This is covered in RFC6793. No use for it here
-     except for causing confusion.
-        <t>Aggregation of routes containing the AS4_PATH by OLD speakers can
-        result in inconsistencies between the AS_PATH and the AS4_PATH which
-        cause problems for
-        reconstruction of the AS_PATH by a NEW speaker that has received an OLD
-        speaker's AS_PATH and AS4_PATH.  See
-        <xref target="RFC6793" section="4.2.3"/> for details.</t>
--->
+
       </section>
     </section>
-
-      <!-- <t>If a network operator wishes to consider BGP UPDATE messages with
-      AS_SETs or AS_CONFED_SETs received from an external BGP peers, they MAY
-      have a feature (knob) in their implementation to do so on a per-peer
-      basis. The operator should understand the full implications of choosing
-      this option.</t>
-      XXX KS - I think this paragraph is not needed considering that we have already said in the revised text above that network operators can make exceptions to the default with explicit configuration. -->    
-
-<!-- XXX JMH - A stub AS can happily absorb routes containing AS_SETs according to local policy, since it has no interest in propagating them to other speakers that may have RPKI origin considerations.  The consideration here applies only to transit ASes and their downstreams. -->
-
-<!-- XXX KS - the following text is a repeat of the text in the first paragraph:
-      <t>Network operators SHOULD NOT locally generate any new announcements
-      containing AS_SETs or AS_CONFED_SETs.</t> -->
 
     <section title="Treatment of Routes with AS_SET in RPKI-based BGP Security">
       <t>Resource Public Key Infrastructure (RPKI) <xref target="RFC6480"/> uses X.509
@@ -247,25 +224,6 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       based on RPKI. BGPsec does not support AS_SETs. In ASPA-based AS_PATH verification, 
       a route with AS_SET is always considered Invalid and hence ineligible for route selection.</t>
     </section>
-<!-- XXX KS - The Section below is now summarized in paragraph 2 
-     in the above "Recommendations" section. The third paragaprh below 
-     is a repeat of what is already said in the "Recommendations". 
-     These changes are based on Alvaro's suggestion to keep 
-     all specifications together in one place.  
-    <section title="Updates to Existing RFCs">
-      <t>This document deprecates the origination of BGP routes with AS_SET
-      (type 1) (see <xref target="RFC4271" section="4.3" sectionFormat="comma"/>).</t>
-
-      <t>This document also deprecates the origination of BGP routes with
-      AS_CONFED_SET (type 4) AS_PATH segments
-      (see <xref target="RFC5065" section="3" sectionFormat="comma"/>).</t>
-
-      <t>BGP speakers conforming to this document &mdash; i.e., conformant BGP
-      speakers &mdash; SHOULD NOT originate BGP UPDATE messages containing
-      AS_SETs or AS_CONFED_SETs.  Upon receipt of BGP routes containing
-      AS_SETs, conformant BGP speakers SHOULD use the "treat-as-withdraw" error
-      handling behavior as per <xref target="RFC7606"/>.</t>
--->
 
       <section title="BGP AS_PATH &quot;Brief&quot; Aggregation">
         <t>
@@ -273,8 +231,6 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       Appendix F.6 in <xref target="RFC4271"/>
         describes a generally less utilized "Complex AS_PATH Aggregation"
         procedure.</t>
-<!-- XXX KS - in the above did this: s/a generally unimplemented/a generally less utilized/. 
-     This is in response to Keyur's comment. -->
 
         <t><xref target="RFC4271" section="5.1.6" sectionFormat="comma"/>,
         describing the ATOMIC_AGGREGATE Path Attribute, notes that:</t>
@@ -542,7 +498,7 @@ R2 - 192.0.2.64/26  AS_PATH "64502"
 R3 - 192.0.2.128/26 AS_PATH "64504 64502"
 R4 - 192.0.2.192/26 AS_PATH "64504 64501"
 
-           (       )                        (       )         
+           (       )                        (       )
           ( AS64501 )                      ( AS64502 )
            (       )                        (       )
 192.0.2.0/26    192.0.2.192/26    192.0.2.128/26  192.0.2.64/26
@@ -556,10 +512,10 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
      |                   R4 |      | R3              |
      |                      |      |                 |
      |                      \/    \/                 |
-     |                     (         )               |
-     +------------ R1 --->(  AS64500  )<--- R2 ------+             |
-                           (         )  
-                                |                    
+     |             R1      (         )      R2       |
+     +------------------->(  AS64500  )<-------------+
+                           (         )
+                                |
                                 | (announcing
                                 |  aggregate 192.0.2.0/24)
                                \/
