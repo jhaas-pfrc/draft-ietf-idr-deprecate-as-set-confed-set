@@ -18,7 +18,7 @@
 <!ENTITY I-D.ietf-sidrops-aspa-verification SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-sidrops-aspa-verification.xml">
 ]>
 
-<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-15" updates="4271 5065" obsoletes="6472" ipr="trust200902">
+<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-16" updates="4271 5065" obsoletes="6472" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
   <?rfc toc="yes" ?>
   <?rfc symrefs="yes" ?>
@@ -192,7 +192,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
         <ul>
           <li>MUST NOT advertise BGP UPDATE messages containing AS_SETs or AS_CONFED_SETs, and</li>
           <li>Upon reception of BGP UPDATE messages containing AS_SETs or AS_CONFED_SETs 
-              in the AS_PATH, MUST use the "treat-as-withdraw" error handling 
+              in the AS_PATH or AS4_PATH <xref target="RFC6793"/>, MUST use the "treat-as-withdraw" error handling 
               behavior as per <xref target="RFC7606"/>.</li>
         </ul>
       </t>
@@ -201,17 +201,6 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       by deprecating AS_SET (see <xref target="RFC4271" section="4.3" sectionFormat="comma"/>) 
       and AS_CONFED_SET (see <xref target="RFC5065" section="3" sectionFormat="comma"/>), respectively.</t>
 
-      <section title="Considerations for AS4_PATH">
-        <t><xref target="RFC6793"/> created support for four-octet AS numbers in
-        BGP using the optional transitive AS4_PATH attribute.
-        The mandatory AS_PATH attribute is always present in a route <xref target="RFC4271"/>,
-        while the AS4_PATH may or may not be present.
-        If both AS_PATH and AS4_PATH attributes are present,
-        an AS_SET present in one would also be necessarily present in the other.
-        So, it is sufficient to perform the "treat-as-withdraw" error handling as
-        specified above using the AS_PATH alone.</t>
-
-      </section>
     </section>
 
     <section title="Treatment of Routes with AS_SET in RPKI-based BGP Security">
@@ -359,7 +348,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
 
     <section title="Acknowledgements">
       <t>The authors would like to thank Alvaro Retana, Ketan Talaulikar, 
-      Keyur Patel, Susan Hares, Nick Hilliard, Robert Raszuk, 
+      Keyur Patel, Susan Hares, Claudio Jeker, Nick Hilliard, Robert Raszuk, 
       John Heasley, Job Snijders, Jared Mauch, Jakob Heitz, 
       Douglas Montgomery, Randy Bush, John Scudder, Curtis Villamizar, Danny McPherson, Chris Morrow,
       Tom Petch, Ilya Varlashkin, Enke Chen, Tony Li, Florian Weimer, John
