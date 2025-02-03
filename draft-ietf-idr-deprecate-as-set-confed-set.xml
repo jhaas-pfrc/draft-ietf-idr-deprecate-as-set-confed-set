@@ -18,7 +18,7 @@
 <!ENTITY I-D.ietf-sidrops-aspa-verification SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-sidrops-aspa-verification.xml">
 ]>
 
-<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-16" updates="4271 5065" obsoletes="6472" ipr="trust200902">
+<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-17" updates="4271 5065" obsoletes="6472" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
   <?rfc toc="yes" ?>
   <?rfc symrefs="yes" ?>
@@ -129,7 +129,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       using AS_SET (see <xref target="RFC4271"></xref>) and AS_CONFED_SET (see
       <xref target="RFC5065"></xref>) AS_PATH path segment types in the Border
       Gateway Protocol (BGP).  This document advances the BCP recommendation to
-      a standards requirement in BGP; it forbids the use of the AS_SET and
+      a standards requirement in BGP; it prohibits the use of the AS_SET and
       AS_CONFED_SET types of path segments in the AS_PATH. The purpose is to
       simplify the design and implementation of BGP and to make the semantics
       of the originator of a BGP route clearer. This will also simplify the design,
@@ -313,7 +313,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       <section title="Not Advertising Aggregate Routes to Contributing ASes"
        anchor="filtering-to-contributors">
         <t>An aggregate prefix
-        MUST NOT be announced to the contributing ASes. Instead, more specific
+        SHOULD NOT be announced to the contributing ASes. Instead, more specific
         prefixes (from the aggregate) SHOULD be announced to each contributing AS,
         excluding any that were learned from the contributing AS in
         consideration.  See <xref target="filter-example"/> for an example of
@@ -325,9 +325,9 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
         the presence of both less specific and more specific destinations has
         the possibility to create forwarding loops between networks.</t>
 
-        <t>As a reminder, Rule #2 of  <xref target="RFC4632" section="5.1"/>
+        <t>As a reminder, Rule #2 of <xref target="RFC4632" section="5.1"/>
         requires that BGP implementations performing aggregation discard
-        packets that match the aggregate route, but not any of the
+        packets that match the aggregate route but do not match any of the
         more-specific routes.
         </t>
 
@@ -353,7 +353,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
     <section title="Acknowledgements">
       <t>The authors would like to thank Alvaro Retana, Ketan Talaulikar,
       Keyur Patel, Susan Hares, Claudio Jeker, Nick Hilliard, Robert Raszuk,
-      John Heasley, Job Snijders, Jared Mauch, Jakob Heitz,
+      John Heasley, Job Snijders, Jared Mauch, Jakob Heitz, Tony Przygienda, 
       Douglas Montgomery, Randy Bush, John Scudder, Curtis Villamizar, Danny McPherson, Chris Morrow,
       Tom Petch, Ilya Varlashkin, Enke Chen, Tony Li, Florian Weimer, John
       Leslie, Paul Jakma, Rob Austein, Russ Housley, Sandra Murphy, Steve
@@ -612,11 +612,11 @@ R4 - 192.0.2.192/26 AS_PATH "64504 64501"
       it is critical to adhere to the following:</t>
         <ol>
           <li>Rule #2 of <xref target="RFC4632" section="5.1"/>:
-          A router that generates an aggregate route for one or more
-          more-specific routes routes must discard packets that match the
+          "A router that generates an aggregate route for multiple,
+          more-specific routes must discard packets that match the
           aggregate route, but not any of the more-specific routes.  In other
           words, the "next hop" for the aggregate route should be the null
-          destination.</li>
+          destination."</li>
           <li> Not advertising aggregate routes to contributing ASes
           as specified in <xref target="filtering-to-contributors"/>
           of this document (also see <xref target="filter-example"/>).</li>
