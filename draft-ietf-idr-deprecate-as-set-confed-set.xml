@@ -18,7 +18,7 @@
 <!ENTITY I-D.ietf-sidrops-aspa-verification SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-sidrops-aspa-verification.xml">
 ]>
 
-<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-17" updates="4271 5065" obsoletes="6472" ipr="trust200902">
+<rfc submissionType="IETF" category="std" docName="draft-ietf-idr-deprecate-as-set-confed-set-18" updates="4271 5065" obsoletes="6472" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
   <?rfc toc="yes" ?>
   <?rfc symrefs="yes" ?>
@@ -161,7 +161,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       issues, such as not being able to authenticate a route origin for the
       aggregate prefix in new BGP security technologies such as those that take
       advantage of X.509 extensions for IP addresses and AS identifiers
-      (<xref target="RFC3779"/>, <xref target="RFC6480"/>,
+      (<xref target="RFC6480"/>,
       <xref target="RFC6811"/>, <xref target="RFC6907"/>,
       <xref target="RFC8205"/>, <xref target="RFC9319"/>).
       This could result in reachability problems for the destinations
@@ -368,6 +368,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       &rfc4271;
       &rfc4632;
       &rfc5065;
+      &rfc6472;
       &rfc6793;
       &rfc7606;
       &rfc8174;
@@ -375,7 +376,6 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
 
     <references title="Informative References">
       &rfc3779;
-      &rfc6472;
       &rfc6811;
       &rfc6480;
       &rfc9582;
