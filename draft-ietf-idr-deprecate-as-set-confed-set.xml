@@ -161,8 +161,7 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
       issues, such as not being able to authenticate a route origin for the
       aggregate prefix in new BGP security technologies such as those that take
       advantage of X.509 extensions for IP addresses and AS identifiers
-      (<xref target="RFC6480"/>,
-      <xref target="RFC6811"/>, <xref target="RFC6907"/>,
+      (<xref target="RFC6480"/>, <xref target="RFC6811"/>, <xref target="RFC6907"/>,
       <xref target="RFC8205"/>, <xref target="RFC9319"/>).
       This could result in reachability problems for the destinations
       covered by the aggregated prefix.</t>
@@ -351,14 +350,16 @@ title) for use on http://www.rfc-editor.org/rfcsearch.html.
     </section>
 
     <section title="Acknowledgements">
-      <t>The authors would like to thank Alvaro Retana, Ketan Talaulikar,
+      <t>The authors would like to thank Alvaro Retana, John Scudder, Ketan Talaulikar,
       Keyur Patel, Susan Hares, Claudio Jeker, Nick Hilliard, Robert Raszuk,
       John Heasley, Job Snijders, Jared Mauch, Jakob Heitz, Tony Przygienda, 
-      Douglas Montgomery, Randy Bush, John Scudder, Curtis Villamizar, Danny McPherson, Chris Morrow,
+      Douglas Montgomery, Randy Bush, Curtis Villamizar, Danny McPherson, Chris Morrow,
       Tom Petch, Ilya Varlashkin, Enke Chen, Tony Li, Florian Weimer, John
       Leslie, Paul Jakma, Rob Austein, Russ Housley, Sandra Murphy, Steve
       Bellovin, Steve Kent, Steve Padgett, and Alfred Hoenes for
-      comments and suggestions.</t>
+      comments and suggestions. The comments and suggestions received from the IESG reviewers are also much appreciated.
+
+ </t>
     </section>
   </middle>
 
